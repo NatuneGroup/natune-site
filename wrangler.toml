@@ -1,0 +1,9 @@
+name = "natune"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-01"
+
+# Login-attempt rate limiting for /api/admin/* Pages Functions.
+# Namespace created with: wrangler kv namespace create ADMIN_KV
+[[kv_namespaces]]
+binding = "ADMIN_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

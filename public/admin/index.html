@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · Natune</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0d110d">
+<link rel="icon" type="image/png" href="/assets/img/logo.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<header class="navbar is-scrolled">
+  <a class="navbar__brand" href="/">
+    <img src="/assets/img/logo.png" alt="Natune logo" width="34" height="34">
+    Natune <span class="chip">admin</span>
+  </a>
+  <nav class="navbar__links" aria-label="Admin navigation">
+    <a href="/news/">View news page</a>
+    <a href="/">Site</a>
+  </nav>
+</header>
+
+<main id="main" class="section">
+  <div class="wrap">
+
+    <!-- login -->
+    <div class="admin-login" id="login-view" hidden>
+      <div class="admin-card">
+        <h2 style="margin:0 0 6px">News admin</h2>
+        <p style="color:var(--on-surface-variant);margin:0 0 22px;font-size:.95rem">Sign in to publish announcements to the app and this site.</p>
+        <form id="login-form">
+          <div class="field">
+            <label for="pw">Password</label>
+            <input id="pw" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="admin-msg" id="login-msg"></div>
+          <button class="btn btn-primary" type="submit" style="width:100%;justify-content:center">Sign in</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- editor -->
+    <div id="editor-view" hidden>
+      <div class="admin-toolbar">
+        <h2 style="margin:0">Announcements</h2>
+        <span class="spacer"></span>
+        <button class="btn btn-tonal btn-sm" id="btn-refresh" type="button">Refresh</button>
+        <button class="btn btn-primary btn-sm" id="btn-new" type="button">New announcement</button>
+        <button class="btn btn-outline btn-sm" id="btn-logout" type="button">Sign out</button>
+      </div>
+      <div class="admin-msg" id="editor-msg"></div>
+      <div class="admin-list" id="items"></div>
+
+      <div class="admin-card" id="form-card" hidden>
+        <h3 style="margin-top:0" id="form-title">New announcement</h3>
+        <form id="news-form">
+          <input type="hidden" id="f-id">
+          <div class="field"><label for="f-title">Title *</label><input id="f-title" required maxlength="200"></div>
+          <div class="field"><label for="f-desc">Description</label><input id="f-desc" maxlength="300"><span class="hint">Short plain-text preview shown in the list — markdown is not rendered here.</span></div>
+          <div class="field"><label for="f-author">Author *</label><input id="f-author" required maxlength="80" value="Natune Team"></div>
+          <div class="field"><label for="f-images">Image URLs</label><textarea id="f-images" style="min-height:70px" placeholder="https://natune.pages.dev/assets/news/banner.webp"></textarea><span class="hint">One absolute URL per line. Leave empty for none.</span></div>
+          <div class="field"><label class="check"><input id="f-important" type="checkbox"> Mark as important (red badge in the app)</label></div>
+          <div class="field"><label for="f-body">Body (Markdown) *</label><textarea id="f-body" required placeholder="## What's new&#10;&#10;- …"></textarea></div>
+          <div class="admin-msg" id="form-msg"></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-primary" type="submit" id="btn-save">Publish</button>
+            <button class="btn btn-outline" type="button" id="btn-cancel">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</main>
+<script src="/assets/js/admin.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News · Natune</title>
+<meta name="description" content="Natune announcements — release notes, known issues and project news.">
+<meta name="theme-color" content="#0d110d">
+<link rel="icon" type="image/png" href="/assets/img/logo.png">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header class="navbar is-scrolled">
+  <a class="navbar__brand" href="/">
+    <img src="/assets/img/logo.png" alt="Natune logo" width="34" height="34">
+    Natune
+  </a>
+  <nav class="navbar__links" aria-label="Main navigation">
+    <a href="/#showcase">Showcase</a>
+    <a href="/#features">Features</a>
+    <a href="/#platforms">Platforms</a>
+    <a href="/news/" aria-current="page">News</a>
+    <a href="/#faq">FAQ</a>
+  </nav>
+  <a class="btn btn-primary btn-sm navbar__cta" href="/#download">Download</a>
+</header>
+
+<main id="main" class="section">
+  <div class="wrap">
+    <div id="news-list-view">
+      <div class="section-head">
+        <span class="eyebrow">News</span>
+        <h2>Announcements</h2>
+        <p>Release notes, known issues and project news — the same feed the Android app shows.</p>
+      </div>
+      <div class="news-list" id="news-list"><p class="news-state">Loading…</p></div>
+    </div>
+    <article class="news-article" id="news-article-view" hidden>
+      <p><a href="/news/" id="news-back">&larr; All announcements</a></p>
+      <h1 id="na-title"></h1>
+      <div class="meta" id="na-meta"></div>
+      <div id="na-images"></div>
+      <div class="md-body" id="na-body"></div>
+    </article>
+  </div>
+</main>
+
+<script src="/assets/js/news.js" defer></script>
+</body>
+</html>

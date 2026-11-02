@@ -1,0 +1,16 @@
+{
+  "name": "natune-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public Natune website — landing page, static news API and admin for natune.pages.dev",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-news.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && npx wrangler pages dev dist",
+    "deploy": "node scripts/build.mjs && npx wrangler pages deploy dist --project-name natune"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
