@@ -11,6 +11,16 @@
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm-2 20h-4v-1h4v1zm3-4H7V4h10v13z"/></symbol>
+  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4C2.9 4 2 4.9 2 6v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></symbol>
+  <symbol id="i-news" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 12H7v-2h3v2zm0-4H7V9h3v2zm7 4h-5v-6h5v6z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2v2zm2.07-7.75-.9.92A3.5 3.5 0 0 0 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A2 2 0 1 0 10 9H8a4 4 0 1 1 8 0c0 .88-.36 1.68-.93 2.25z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm14-9h-4V3H9v8H5l7 8 7-8z"/></symbol>
+</svg>
 <header class="navbar is-scrolled">
   <a class="navbar__brand" href="/">
     <img src="/assets/img/logo.png" alt="Natune logo" width="34" height="34">
@@ -24,7 +34,18 @@
     <a href="/#faq">FAQ</a>
   </nav>
   <a class="btn btn-primary btn-sm navbar__cta" href="/#download">Download</a>
+  <button class="navbar__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+    <svg class="icon icon-lg"><use href="#i-menu"/></svg>
+  </button>
 </header>
+<nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
+  <a href="/#showcase"><svg class="icon"><use href="#i-phone"/></svg>Showcase</a>
+  <a href="/#features"><svg class="icon"><use href="#i-tune"/></svg>Features</a>
+  <a href="/#platforms"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</a>
+  <a href="/news/"><svg class="icon"><use href="#i-news"/></svg>News</a>
+  <a href="/#faq"><svg class="icon"><use href="#i-help"/></svg>FAQ</a>
+  <a class="btn btn-primary" href="/#download"><svg class="icon"><use href="#i-download"/></svg>Download</a>
+</nav>
 
 <main id="main" class="section">
   <div class="wrap">
@@ -46,6 +67,7 @@
   </div>
 </main>
 
+<script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/news.js" defer></script>
 </body>
 </html>
