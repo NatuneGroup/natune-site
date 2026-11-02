@@ -5,51 +5,67 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  // Minimal markdown renderer (headings, emphasis, links, lists, code, quotes).
-  // Input is admin-authored; output escapes all raw HTML first.
-  const md = (src) => {
-    let html = esc(src);
-    const blocks = html.split(/\n{2,}/);
-    const out = [];
-    for (let b of blocks) {
-      b = b.trimEnd();
-      if (!b) continue;
-      if (/^```/.test(b)) {
-        out.push('<pre><code>' + b.replace(/^```\w*\n?/, '').replace(/```\s*$/, '') + '</code></pre>');
-        continue;
-      }
-      const lines = b.split('\n');
-      if (lines.every((l) => /^\s*[-*]\s+/.test(l))) {
-        out.push('<ul>' + lines.map((l) => '<li>' + inline(l.replace(/^\s*[-*]\s+/, '')) + '</li>').join('') + '</ul>');
-        continue;
-      }
-      if (lines.every((l) => /^\s*\d+[.)]\s+/.test(l))) {
-        out.push('<ol>' + lines.map((l) => '<li>' + inline(l.replace(/^\s*\d+[.)]\s+/, '')) + '</li>').join('') + '</ol>');
-        continue;
-      }
-      const h = b.match(/^(#{1,6})\s+(.*)$/s);
-      if (h) {
-        const lvl = Math.min(h[1].length + 1, 6); // md h1 -> page h2 (page h1 is the title)
-        out.push(`<h${lvl}>${inline(h[2])}</h${lvl}>`);
-        continue;
-      }
-      if (/^&gt;\s?/m.test(b)) {
-        out.push('<blockquote>' + b.split('\n').map((l) => inline(l.replace(/^&gt;\s?/, ''))).join('<br>') + '</blockquote>');
-        continue;
-      }
-      if (/^(-{3,}|\*{3,}|_{3,})$/.test(b.trim())) { out.push('<hr>'); continue; }
-      out.push('<p>' + inline(b).replace(/\n/g, '<br>') + '</p>');
-    }
-    return out.join('\n');
+  // Markdown renderer: marked parses, DOMPurify sanitizes the generated HTML.
+  // Both are vendored under /assets/vendor/ (see that README for versions/licenses).
+  // Raw HTML in the source is escaped, never emitted; links and images only
+  // allow http(s) and relative URLs; links get rel="noopener noreferrer".
+  const isSafeUrl = (href) => {
+    if (typeof href !== 'string') return false;
+    // Browsers ignore ASCII whitespace/control chars inside URLs; strip them
+    // before the scheme check so "java\tscript:" can't slip through.
+    const clean = href.trim().replace(/[\s\x00-\x1f]+/g, '');
+    if (!clean) return false;
+    if (clean.startsWith('//')) return true; // scheme-relative resolves to http(s)
+    const scheme = clean.match(/^([a-zA-Z][a-zA-Z0-9+.-]*):/);
+    if (!scheme) return true; // relative URL (path, query or fragment only)
+    return scheme[1].toLowerCase() === 'http' || scheme[1].toLowerCase() === 'https';
   };
-  const inline = (s) =>
-    s
-      .replace(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g, '<img alt="$1" src="$2" loading="lazy">')
-      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" rel="noopener nofollow">$1</a>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-      .replace(/~~([^~]+)~~/g, '<del>$1</del>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+  if (typeof marked !== 'undefined') {
+    marked.use({
+      gfm: true,
+      breaks: false,
+      renderer: {
+        heading({ tokens, depth }) {
+          const text = this.parser.parseInline(tokens);
+          const lvl = Math.min(depth + 1, 6); // md h1 -> page h2 (page h1 is the title)
+          return `<h${lvl}>${text}</h${lvl}>\n`;
+        },
+        link({ href, title, tokens }) {
+          const text = this.parser.parseInline(tokens);
+          if (!isSafeUrl(href)) return text;
+          const t = title ? ` title="${esc(title)}"` : '';
+          return `<a href="${esc(href)}"${t} rel="noopener noreferrer">${text}</a>`;
+        },
+        image({ href, title, text }) {
+          if (!isSafeUrl(href)) return esc(text || '');
+          const t = title ? ` title="${esc(title)}"` : '';
+          return `<img src="${esc(href)}" alt="${esc(text || '')}"${t} loading="lazy">`;
+        },
+        // Raw HTML is disabled: render it as visible source text instead.
+        html({ text }) { return esc(text); },
+      },
+    });
+  }
+  if (typeof DOMPurify !== 'undefined') {
+    // Belt and suspenders: any <a> that survives sanitization keeps the rel.
+    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+      if (node.tagName === 'A') node.setAttribute('rel', 'noopener noreferrer');
+    });
+  }
+  const sanitize = (html) =>
+    DOMPurify.sanitize(html, {
+      USE_PROFILES: { html: true },
+      FORBID_TAGS: ['style', 'form', 'input', 'textarea', 'select', 'option', 'button', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
+      FORBID_ATTR: ['style'],
+    });
+  const md = (src) => {
+    if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') {
+      // Vendor scripts blocked/missing: text-only fallback, never unsanitized HTML.
+      return '<p>' + esc(String(src)).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+    }
+    return sanitize(marked.parse(String(src)));
+  };
 
   const fmtDate = (d) => {
     const sec = typeof d === 'string' ? Number(d) : d;
@@ -103,6 +119,7 @@
       esc(item.Title) + (item.Important ? ' <span class="badge-important">Important</span>' : '');
     $('na-meta').textContent = `${item.Author} · ${fmtDate(item.Date)}`;
     $('na-images').innerHTML = imgArr(item.ImageURL)
+      .filter(isSafeUrl)
       .map((u) => `<img src="${esc(u)}" alt="" loading="lazy">`)
       .join('');
     fetch('/api/news/content/' + encodeURIComponent(item.id), { cache: 'no-store' })

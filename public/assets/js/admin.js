@@ -57,7 +57,7 @@
 
   function renderList() {
     const el = $('items');
-    if (!items.length) { el.innerHTML = '<p style="color:var(--on-surface-variant)">No announcements yet.</p>'; return; }
+    if (!items.length) { el.innerHTML = '<p class="muted">No announcements yet.</p>'; return; }
     el.innerHTML = items.map((it) => `
       <div class="admin-item">
         <b>${esc(it.Title)} ${it.Important ? '<span class="badge-important">Important</span>' : ''}</b>
