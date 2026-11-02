@@ -1,5 +1,14 @@
 [
   {
+    "id": "e2e-test-announcement.md",
+    "Title": "E2E test announcement",
+    "Description": "Temporary item verifying the publish pipeline.",
+    "ImageURL": [],
+    "Important": false,
+    "Author": "Natune Team",
+    "Date": "1793626136"
+  },
+  {
     "id": "welcome-natune.md",
     "Title": "Welcome to Natune",
     "Description": "Our new home at natune.pages.dev is live — release notes, known issues and project news will land here first.",
