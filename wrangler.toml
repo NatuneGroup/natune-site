@@ -6,4 +6,4 @@ compatibility_date = "2026-10-01"
 # Namespace created with: wrangler kv namespace create ADMIN_KV
 [[kv_namespaces]]
 binding = "ADMIN_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "ffede466dec847668dcaaefa00b0de32"
