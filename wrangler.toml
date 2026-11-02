@@ -2,8 +2,20 @@ name = "natune"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-10-01"
 
-# Login-attempt rate limiting for /api/admin/* Pages Functions.
-# Namespace created with: wrangler kv namespace create ADMIN_KV
-[[kv_namespaces]]
-binding = "ADMIN_KV"
-id = "ffede466dec847668dcaaefa00b0de32"
+# Atomic login-attempt rate limiting for /api/admin/* Pages Functions.
+# Database created with:
+#   npx wrangler d1 create natune-login-throttle
+# Schema applied with:
+#   npx wrangler d1 execute natune-login-throttle --remote --file migrations/0001_login_attempts.sql
+# For local `wrangler pages dev`, also run without --remote to seed the local db:
+#   npx wrangler d1 execute natune-login-throttle --local --file migrations/0001_login_attempts.sql
+[[d1_databases]]
+binding = "ADMIN_DB"
+database_name = "natune-login-throttle"
+database_id = "e990bba6-a3d1-4618-82ba-c34271f62acc"
+migrations_dir = "migrations"
+
+# NOTE: the previous ADMIN_KV namespace was only used by the old non-atomic
+# login throttle and is intentionally unbound here. The KV namespace itself
+# (id ffede466dec847668dcaaefa00b0de32) can be deleted from the account once
+# this change has shipped and the admin is confirmed working.

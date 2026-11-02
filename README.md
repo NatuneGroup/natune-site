@@ -9,7 +9,8 @@ Public website for **Natune** — <https://natune.pages.dev> — hosted on Cloud
 | `public/` | Fully static site — landing page, `/news/`, `/admin/`, assets |
 | `public/api/news/` | The app's announcements feed: `index.json` + `content/<id>.md` |
 | `functions/api/admin/` | Pages Functions (the only dynamic part): login + news CRUD |
-| `scripts/` | `build.mjs` (public → dist) and `validate-news.mjs` (contract check) |
+| `migrations/` | D1 schema for the atomic login-attempt throttle |
+| `scripts/` | `build.mjs` (public → dist), `validate-news.mjs` (contract check), `test-security.mjs` (renderer XSS + throttle tests) |
 | `.github/workflows/deploy.yml` | push to `main` → build → `wrangler pages deploy` |
 
 ## News contract (consumed by the app)
@@ -37,7 +38,7 @@ Reads are plain static file serves — no Functions are invoked for `/api/news/*
 
 ## Admin
 
-`/admin/` — password login (HttpOnly session cookie, KV rate limiting) then create/edit/delete
+`/admin/` — password login (HttpOnly session cookie, D1 atomic rate limiting) then create/edit/delete
 announcements. Publishing commits `index.json` + `content/<id>` to this repo via the GitHub API,
 which triggers the deploy workflow.
 
@@ -48,7 +49,15 @@ which triggers the deploy workflow.
 | `ADMIN_PASSWORD_HASH` | `hmac1$<salt_hex>$<hmac_sha256_hex>` — HMAC keyed by `ADMIN_SESSION_SECRET` over `salt:password` |
 | `ADMIN_SESSION_SECRET` | Random 32+ byte secret (also the HMAC key/pepper and session signing key) |
 | `GITHUB_NEWS_TOKEN` | GitHub PAT with `contents:write` on this repo |
-| `ADMIN_KV` | **KV namespace binding** (not a secret): login-attempt rate limiting |
+| `ADMIN_DB` | **D1 binding** (not a secret): atomic login-attempt rate limiting — database `natune-login-throttle`, bound via `wrangler.toml` on deploy |
+
+D1 setup (already created; only needed to recreate or inspect):
+
+```bash
+npx wrangler d1 create natune-login-throttle
+npx wrangler d1 execute natune-login-throttle --remote --file migrations/0001_login_attempts.sql   # prod schema
+npx wrangler d1 execute natune-login-throttle --local  --file migrations/0001_login_attempts.sql   # local dev schema
+```
 
 ### Secrets (GitHub Actions)
 
@@ -63,5 +72,6 @@ which triggers the deploy workflow.
 npm install
 npm run dev      # build + wrangler pages dev
 npm run build    # validate news JSON + copy public/ to dist/
+npm test         # XSS payloads through the real renderer + throttle tests vs a mocked D1
 npm run deploy   # build + wrangler pages deploy
 ```

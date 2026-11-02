@@ -1,6 +1,7 @@
 // Shared helpers for /api/admin/* Pages Functions.
 // Auth model: salted password hash (HMAC-SHA256, ADMIN_SESSION_SECRET as pepper)
-// -> signed HttpOnly session cookie. Login attempts are rate-limited via KV.
+// -> signed HttpOnly session cookie. Login attempts are rate-limited via a D1
+// database using a single atomic upsert per attempt (see rateLimit below).
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();
@@ -8,7 +9,7 @@ const dec = new TextDecoder();
 export const json = (data, status = 200, headers = {}) =>
   new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...headers },
+    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', ...headers },
   });
 
 const toHex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -65,43 +66,115 @@ export async function isAuthenticated(context) {
   return timingSafeEq(expected, sig);
 }
 
-// ---- login rate limit (KV) ----
+// ---- login rate limit (D1, atomic) ----
+// Every login request atomically RESERVES one attempt in each bucket via a
+// single upsert BEFORE the password is verified. The old KV flow did a
+// check-then-increment that concurrent requests could race (parallel
+// attempts all passed the check before any of them wrote); here the counter
+// increment and the limit check are one SQLite statement, so the
+// (limit+1)th request is always rejected. D1 serializes writes per database.
+//
+// Buckets (all three reserved on every attempt):
+//   login:ip:<addr>    exact client IP                     -> LIMIT_IP
+//   login:net:<prefix> IPv6 /64 prefix (full IP for IPv4)  -> LIMIT_PREFIX
+//   login:acct:admin   account-wide backstop               -> LIMIT_ACCOUNT
+// If ADMIN_DB is missing or errors, login fails closed (503).
 const WINDOW_S = 600;
-const MAX_ATTEMPTS = 8;
+const LIMIT_IP = 8;       // per exact client IP per 10 min
+const LIMIT_PREFIX = 24;  // per IPv6 /64 (full IP for IPv4) per 10 min
+const LIMIT_ACCOUNT = 40; // global, per 10 min
+
+// Bucket prefix for an address: /64 for IPv6, the full address otherwise.
+function ipPrefixKey(ip) {
+  const v4mapped = ip.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i);
+  if (v4mapped) return v4mapped[1];
+  if (!ip.includes(':')) return ip; // IPv4 or unparseable -> full IP is the bucket
+  const dbl = ip.indexOf('::');
+  let groups;
+  if (dbl === -1) {
+    groups = ip.split(':');
+  } else {
+    const head = ip.slice(0, dbl).split(':').filter(Boolean);
+    const tail = ip.slice(dbl + 2).split(':').filter(Boolean);
+    groups = [...head, ...Array(Math.max(8 - head.length - tail.length, 0)).fill('0'), ...tail];
+  }
+  return groups.slice(0, 4).map((g) => g || '0').join(':') + '::/64';
+}
+
+// Reserves one attempt per bucket in a single statement and returns the
+// resulting counters. An expired window (reset_at <= now) starts a fresh one.
+const RESERVE_SQL = `
+  INSERT INTO login_attempts (key, n, reset_at)
+  VALUES (?, 1, ?), (?, 1, ?), (?, 1, ?)
+  ON CONFLICT (key) DO UPDATE SET
+    n        = CASE WHEN reset_at > ? THEN n + 1 ELSE 1 END,
+    reset_at = CASE WHEN reset_at > ? THEN reset_at ELSE excluded.reset_at END
+  RETURNING key, n, reset_at`;
 
 export async function rateLimit(context) {
-  const kv = context.env.ADMIN_KV;
-  if (!kv) return { limited: false }; // fail-open only if binding missing
-  const ip = context.request.headers.get('CF-Connecting-IP') || 'unknown';
-  const key = `login:${ip}`;
+  const db = context.env.ADMIN_DB;
+  if (!db) return { limited: true, unavailable: true }; // fail closed
+
+  const ip = (context.request.headers.get('CF-Connecting-IP') || 'unknown').toLowerCase();
   const now = Math.floor(Date.now() / 1000);
-  let rec = null;
-  try { rec = await kv.get(key, { type: 'json' }); } catch { /* treat as no record */ }
-  if (rec && rec.reset > now && rec.n >= MAX_ATTEMPTS) {
-    return { limited: true, retryAfter: rec.reset - now };
+  const reset = now + WINDOW_S;
+  const buckets = [
+    { key: `login:ip:${ip}`, limit: LIMIT_IP },
+    { key: `login:net:${ipPrefixKey(ip)}`, limit: LIMIT_PREFIX },
+    { key: 'login:acct:admin', limit: LIMIT_ACCOUNT },
+  ];
+
+  let rows;
+  try {
+    const res = await db
+      .prepare(RESERVE_SQL)
+      .bind(buckets[0].key, reset, buckets[1].key, reset, buckets[2].key, reset, now, now)
+      .all();
+    rows = res.results;
+  } catch (e) {
+    console.error('login rate-limit store error:', e);
+    return { limited: true, unavailable: true }; // fail closed
   }
-  return { limited: false, key, now };
+  if (!Array.isArray(rows) || rows.length < buckets.length) {
+    return { limited: true, unavailable: true }; // unexpected result: fail closed
+  }
+
+  const byKey = new Map(rows.map((r) => [r.key, r]));
+  let retryAfter = 0;
+  for (const b of buckets) {
+    const row = byKey.get(b.key);
+    if (row && Number(row.n) > b.limit) {
+      retryAfter = Math.max(retryAfter, Number(row.reset_at) - now);
+    }
+  }
+  return {
+    limited: retryAfter > 0,
+    retryAfter: Math.max(retryAfter, 1),
+    keys: buckets.map((b) => b.key),
+  };
 }
 
-export async function recordFailedAttempt(context, rl) {
-  const kv = context.env.ADMIN_KV;
-  if (!kv || !rl.key) return;
-  let rec = null;
-  try { rec = await kv.get(rl.key, { type: 'json' }); } catch { /* none */ }
-  const rec2 = rec && rec.reset > rl.now ? { n: rec.n + 1, reset: rec.reset } : { n: 1, reset: rl.now + WINDOW_S };
-  await kv.put(rl.key, JSON.stringify(rec2), { expirationTtl: WINDOW_S + 60 });
-}
-
+// Successful login: drop the reserved counters for these buckets.
 export async function clearAttempts(context, rl) {
-  const kv = context.env.ADMIN_KV;
-  if (kv && rl.key) await kv.delete(rl.key);
+  const db = context.env.ADMIN_DB;
+  if (!db || !rl.keys || !rl.keys.length) return;
+  try {
+    await db
+      .prepare(`DELETE FROM login_attempts WHERE key IN (${rl.keys.map(() => '?').join(',')})`)
+      .bind(...rl.keys)
+      .run();
+  } catch { /* stale counters expire on their own window; nothing to do */ }
 }
 
 // ---- origin check for mutations (CSRF hardening on top of SameSite cookie) ----
+// Mutating admin requests must carry an Origin header that exactly equals this
+// site's origin (scheme + host). The admin UI always sends Origin on
+// POST/PUT/DELETE, so a missing Origin is rejected too — this stops
+// cross-site form posts and non-browser replay in one check.
 export function sameOrigin(context) {
   const origin = context.request.headers.get('Origin');
-  if (!origin) return true; // non-browser clients have no Origin; cookie is still required
-  try { return new URL(origin).host === new URL(context.request.url).host; } catch { return false; }
+  if (!origin) return false;
+  try { return new URL(origin).origin === new URL(context.request.url).origin; } catch { return false; }
 }
 
 // ---- GitHub publish (single commit via Git Data API) ----

@@ -1,16 +1,11 @@
 import {
   json, checkPassword, issueSessionCookie,
-  rateLimit, recordFailedAttempt, clearAttempts, sameOrigin,
+  rateLimit, clearAttempts, sameOrigin,
 } from './_shared.js';
 
 // POST /api/admin/login { password }
 export async function onRequestPost(context) {
   if (!sameOrigin(context)) return json({ error: 'bad origin' }, 403);
-
-  const rl = await rateLimit(context);
-  if (rl.limited) {
-    return json({ error: 'too many attempts' }, 429, { 'Retry-After': String(rl.retryAfter) });
-  }
 
   let body;
   try { body = await context.request.json(); } catch { return json({ error: 'invalid json' }, 400); }
@@ -18,11 +13,16 @@ export async function onRequestPost(context) {
     return json({ error: 'password required' }, 400);
   }
 
-  const ok = await checkPassword(context.env, body.password);
-  if (!ok) {
-    await recordFailedAttempt(context, rl);
-    return json({ error: 'invalid credentials' }, 401);
+  // Atomically reserve one attempt in every bucket BEFORE the password is
+  // checked — concurrent requests can't race a check-then-increment gap.
+  const rl = await rateLimit(context);
+  if (rl.unavailable) return json({ error: 'login unavailable' }, 503);
+  if (rl.limited) {
+    return json({ error: 'too many attempts' }, 429, { 'Retry-After': String(rl.retryAfter) });
   }
+
+  const ok = await checkPassword(context.env, body.password);
+  if (!ok) return json({ error: 'invalid credentials' }, 401); // reservation already counted
 
   await clearAttempts(context, rl);
   return json({ ok: true }, 200, { 'Set-Cookie': await issueSessionCookie(context.env) });
