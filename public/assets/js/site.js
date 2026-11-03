@@ -9,18 +9,35 @@
   const burger = document.getElementById('burger');
   const drawer = document.getElementById('drawer');
   if (burger && drawer) {
-    burger.addEventListener('click', () => {
-      const open = drawer.classList.toggle('is-open');
+    const setDrawer = (open) => {
+      drawer.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', String(open));
       burger.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
-    });
+    };
+    const burgerVisible = () => window.getComputedStyle(burger).display !== 'none';
+    burger.addEventListener('click', () => setDrawer(!drawer.classList.contains('is-open')));
     drawer.addEventListener('click', (e) => {
-      if (e.target.closest('a')) {
-        drawer.classList.remove('is-open');
-        burger.setAttribute('aria-expanded', 'false');
-        burger.querySelector('use').setAttribute('href', '#i-menu');
-      }
+      if (e.target.closest('a')) setDrawer(false);
     });
+    // Move focus to the burger when it can take it, else to <main>/body —
+    // never leave it inside an element that just became display:none.
+    const refocusAfterDrawer = () => {
+      const target = burgerVisible() ? burger : document.getElementById('main') || document.body;
+      if (target !== burger && target !== document.body && !target.hasAttribute('tabindex')) {
+        target.setAttribute('tabindex', '-1');
+      }
+      if (target && target.focus) target.focus({ preventScroll: true });
+    };
+    // When the viewport grows past the mobile breakpoint the burger — the
+    // drawer's only trigger — is display:none while the drawer may still be
+    // open. Close the drawer and, if focus was inside it, move it out.
+    const onResize = () => {
+      if (!drawer.classList.contains('is-open') || burgerVisible()) return;
+      const focusInside = drawer.contains(document.activeElement);
+      setDrawer(false);
+      if (focusInside) refocusAfterDrawer();
+    };
+    window.addEventListener('resize', onResize);
   }
 
   const io = new IntersectionObserver(
@@ -54,6 +71,22 @@
   const isAppAsset = (name) => /\.(apk|ipa|dmg|deb|msi|exe|zip|appimage)$/i.test(name);
   const newestAppRelease = (list) =>
     list.find((rel) => Array.isArray(rel.assets) && rel.assets.some((a) => isAppAsset(a.name || ''))) || null;
+
+  // browser_download_url comes from a third-party API response — only ever
+  // render a link when it parses as an https: URL on a GitHub-owned host.
+  const SAFE_ASSET_HOSTS = new Set([
+    'github.com',
+    'objects.githubusercontent.com',
+    'release-assets.githubusercontent.com',
+  ]);
+  const isSafeAssetUrl = (raw) => {
+    try {
+      const u = new URL(raw);
+      return u.protocol === 'https:' && SAFE_ASSET_HOSTS.has(u.hostname);
+    } catch {
+      return false;
+    }
+  };
 
   const stars = document.getElementById('hero-stars');
   const ver = document.getElementById('hero-version');
@@ -168,7 +201,7 @@
       const assets = Array.isArray(rel.assets) ? rel.assets : [];
       const found = PLATFORMS[key].assets
         .map((d) => {
-          const a = assets.find((x) => d.re.test(x.name || ''));
+          const a = assets.find((x) => d.re.test(x.name || '') && isSafeAssetUrl(x.browser_download_url));
           return a ? { label: d.label, name: a.name, url: a.browser_download_url } : null;
         })
         .filter(Boolean);
