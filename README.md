@@ -8,7 +8,7 @@ Public website for **Natune** — <https://natune.pages.dev> — hosted on Cloud
 | --- | --- |
 | `public/` | Fully static site — landing page, `/news/`, `/admin/`, assets |
 | `public/api/news/` | The app's announcements feed: `index.json` + `content/<id>.md` |
-| `functions/api/admin/` | Pages Functions (the only dynamic part): login + news CRUD |
+| `functions/api/` | Pages Functions (the only dynamic part): `/admin/` login + news CRUD, `/news/` 404 guard |
 | `migrations/` | D1 schema for the atomic login-attempt throttle |
 | `scripts/` | `build.mjs` (public → dist), `validate-news.mjs` (contract check), `test-security.mjs` (renderer XSS + throttle tests) |
 | `.github/workflows/deploy.yml` | push to `main` → build → `wrangler pages deploy` |
@@ -34,7 +34,7 @@ Public website for **Natune** — <https://natune.pages.dev> — hosted on Cloud
 Rules: `id` must be a safe filename and match a file under `content/`; `Title`/`Author` required;
 `Date` is epoch **seconds** (quoted or bare number — never a human date); `ImageURL` accepts an
 array, a bare string, or null. `npm run validate` enforces this in CI before every deploy.
-Reads are plain static file serves — no Functions are invoked for `/api/news/*`.
+Reads are plain static file serves. The only Function on this path is a thin catch-all (`functions/api/news/[[path]].js`) that turns the site's single-page-application fallback back into a real 404 when a news asset is missing; existing `index.json`/`content/<id>` files pass through untouched.
 
 ## Admin
 

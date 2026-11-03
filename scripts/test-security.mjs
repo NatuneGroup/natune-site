@@ -257,5 +257,91 @@ console.log('== origin check ==');
     'suffix-lookalike host rejected');
 }
 
+/* ==================== 3. /api/news/* 404 guard ==================== */
+// functions/api/news/[[path]].js sits in front of the static news assets. The
+// Pages project uses single-page-application not-found handling, which rewrites
+// missing paths to index.html (200) — and _headers even re-labels that shell
+// as application/json or text/markdown for these paths, so status and
+// Content-Type cannot detect it. The guard instead checks the news contract:
+// index.json must parse as an array and content/<id> must be a published id;
+// anything else that still comes back as the HTML shell becomes a real 404.
+
+const newsGuard = await import(join(root, 'functions/api/news/[[path]].js'));
+const INDEX_ITEMS = [{ id: 'welcome-natune.md' }, { id: 'release-2.md' }];
+const htmlShell = () => new Response('<!doctype html><title>Natune</title>', {
+  status: 200,
+  headers: { 'Content-Type': 'text/html; charset=utf-8' },
+});
+const callNewsGuard = (path, { indexBody = INDEX_ITEMS, next } = {}) =>
+  newsGuard.onRequest({
+    request: new Request('https://natune.pages.dev' + path),
+    env: {
+      ASSETS: {
+        fetch: async () => new Response(
+          typeof indexBody === 'string' ? indexBody : JSON.stringify(indexBody),
+          { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }),
+      },
+    },
+    next: next ?? (async () => new Response('Not Found', { status: 404 })),
+  });
+
+console.log('== /api/news/* 404 guard (SPA fallback -> real 404) ==');
+
+{
+  const res = await callNewsGuard('/api/news/content/nope.md', { next: htmlShell });
+  ok(res.status === 404, 'unlisted content id -> 404', 'status=' + res.status);
+  ok((res.headers.get('Content-Type') || '').includes('application/json'),
+    '404 body is JSON', res.headers.get('Content-Type'));
+  const body = await res.json();
+  ok(body && body.error === 'not found', '404 body is {error:"not found"}', JSON.stringify(body));
+}
+
+{
+  const upstream = new Response('# Hi', {
+    status: 200,
+    headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
+  });
+  const res = await callNewsGuard('/api/news/content/welcome-natune.md', {
+    next: async () => upstream,
+  });
+  ok(res === upstream && res.status === 200, 'published content passes through');
+  ok(await res.text() === '# Hi', 'markdown body untouched');
+}
+
+{
+  const res = await callNewsGuard('/api/news/content/release-2.md', { next: htmlShell });
+  ok(res.status === 404, 'published id but missing file (HTML shell) -> 404', 'status=' + res.status);
+}
+
+{
+  const upstream = new Response(JSON.stringify(INDEX_ITEMS), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  });
+  const res = await callNewsGuard('/api/news/index.json', { next: async () => upstream });
+  ok(res === upstream && res.status === 200, 'real index.json passes through');
+}
+
+{
+  const res = await callNewsGuard('/api/news/index.json', { indexBody: '<!doctype html>' });
+  ok(res.status === 404, 'missing index.json (HTML shell in ASSETS) -> 404', 'status=' + res.status);
+}
+
+{
+  const res = await callNewsGuard('/api/news/index.json', { indexBody: 'not json{{{' });
+  ok(res.status === 404, 'unparseable index.json -> 404', 'status=' + res.status);
+}
+
+{
+  const res = await callNewsGuard('/api/news/nope', { next: htmlShell });
+  ok(res.status === 404, 'other missing news path (HTML shell) -> 404', 'status=' + res.status);
+}
+
+{
+  const upstream = new Response('Not Found', { status: 404 });
+  const res = await callNewsGuard('/api/news/nope', { next: async () => upstream });
+  ok(res === upstream && res.status === 404, 'upstream 404 stays a 404');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

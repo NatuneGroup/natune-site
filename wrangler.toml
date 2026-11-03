@@ -14,8 +14,3 @@ binding = "ADMIN_DB"
 database_name = "natune-login-throttle"
 database_id = "e990bba6-a3d1-4618-82ba-c34271f62acc"
 migrations_dir = "migrations"
-
-# NOTE: the previous ADMIN_KV namespace was only used by the old non-atomic
-# login throttle and is intentionally unbound here. The KV namespace itself
-# (id ffede466dec847668dcaaefa00b0de32) can be deleted from the account once
-# this change has shipped and the admin is confirmed working.
