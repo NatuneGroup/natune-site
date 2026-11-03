@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Natune · Every source. One player.</title>
-<meta name="description" content="Natune is an open-source Android music player that plays lossless audio from Tidal, Qobuz, Deezer, YouTube, Telegram and more — with word-by-word lyrics, smart transitions and a beautiful Material 3 interface.">
+<meta name="description" content="Natune is an open-source music player for Android, iOS, Windows, macOS and Linux that plays lossless audio from Tidal, Qobuz, Deezer, YouTube, Telegram and more — with word-by-word lyrics, smart transitions and a beautiful Material 3 interface.">
 <meta name="theme-color" content="#0d110d">
 <meta property="og:title" content="Natune · Every source. One player.">
-<meta property="og:description" content="Open-source Android music player — multi-source lossless playback, karaoke lyrics, smart transitions.">
+<meta property="og:description" content="Open-source music player for Android, iOS, Windows, macOS and Linux — multi-source lossless playback, karaoke lyrics, smart transitions.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://natune.pages.dev/assets/img/logo.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -78,7 +78,7 @@
     <a href="/news/">News</a>
     <a href="/#faq">FAQ</a>
   </nav>
-  <a class="btn btn-primary btn-sm navbar__cta" href="/#download"><svg class="icon"><use href="#i-download"/></svg>Download</a>
+  <a class="btn btn-primary btn-sm navbar__cta" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
   <button class="navbar__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
     <svg class="icon icon-lg"><use href="#i-menu"/></svg>
   </button>
@@ -89,7 +89,7 @@
   <a href="/#platforms"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</a>
   <a href="/news/"><svg class="icon"><use href="#i-news"/></svg>News</a>
   <a href="/#faq"><svg class="icon"><use href="#i-help"/></svg>FAQ</a>
-  <a class="btn btn-primary" href="/#download"><svg class="icon"><use href="#i-download"/></svg>Download</a>
+  <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
 </nav>
 
 <main id="main">
@@ -97,15 +97,15 @@
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__inner">
       <div>
-        <span class="hero__eyebrow"><svg class="icon"><use href="#i-eco"/></svg>Open-source Android music player</span>
+        <span class="hero__eyebrow"><svg class="icon"><use href="#i-eco"/></svg>Open-source music player for Android, iOS, Windows, macOS and Linux</span>
         <h1 class="hero__title" id="hero-title">Every source.<br><em>One player.</em></h1>
-        <p class="hero__sub">Natune plays lossless music from Tidal, Qobuz, Deezer, YouTube, Telegram and more — in one fast, beautiful app that puts sound quality first.</p>
+        <p class="hero__sub">Natune plays lossless music from Tidal, Qobuz, Deezer, YouTube, Telegram and more — one fast, beautiful app on your phone, tablet and desktop that puts sound quality first.</p>
         <div class="hero__actions">
-          <a class="btn btn-primary" href="#download"><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
-          <a class="btn btn-tonal" href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
+          <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
+          <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
         </div>
         <div class="hero__meta">
-          <span><b id="hero-version">v15.0.0</b> latest</span><span class="dot"></span>
+          <span><b id="hero-version">N20261103</b> latest</span><span class="dot"></span>
           <span><svg class="icon"><use href="#i-star"/></svg> <b id="hero-stars">—</b> on GitHub</span><span class="dot"></span>
           <span>License <b>GPL-3.0</b></span>
         </div>
@@ -203,6 +203,18 @@
             <span class="chip">16 more styles</span>
           </div></div>
         </article>
+        <article class="feature reveal">
+          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-laptop"/></svg></div>
+          <h3>Every platform</h3>
+          <p>One shared Kotlin Multiplatform codebase runs Natune on Android, iOS, Windows, macOS and Linux — with native adapters where desktop and iOS need them.</p>
+          <div class="feature__demo"><div class="demo-sources">
+            <span class="chip is-on">Android</span>
+            <span class="chip is-on">iOS</span>
+            <span class="chip is-on">Windows</span>
+            <span class="chip is-on">macOS</span>
+            <span class="chip is-on">Linux</span>
+          </div></div>
+        </article>
       </div>
       <ul class="feature-list reveal">
         <li><svg class="icon"><use href="#i-offline"/></svg>Downloads &amp; offline</li>
@@ -222,26 +234,26 @@
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</span>
-        <h2 id="platforms-title">Android today. Everything soon.</h2>
-        <p>Natune is shipping on Android now — and the Kotlin Multiplatform port brings the same app to desktop and iOS.</p>
+        <h2 id="platforms-title">Every platform. One codebase.</h2>
+        <p>Natune is a single Kotlin Multiplatform app — the same code and the same features on Android, iOS, Windows, macOS and Linux. Nightly builds for all five ship from GitHub releases.</p>
       </div>
       <div class="platforms__grid">
         <article class="platform-card reveal">
           <div class="platform-card__head"><svg class="icon"><use href="#i-phone"/></svg><div><h3>Android</h3><span class="tag">Available now</span></div></div>
-          <p>Native Android app with two channels — thoroughly tested Stable builds and daily Nightly builds with the newest features.</p>
+          <p>The native Android app, built from the same shared codebase — daily Nightly builds bring the newest features to Android 7 and newer, on phones and TV.</p>
           <ul>
             <li><svg class="icon"><use href="#i-check"/></svg>Android 7 and newer</li>
             <li><svg class="icon"><use href="#i-check"/></svg>Android TV supported</li>
             <li><svg class="icon"><use href="#i-check"/></svg>Universal APK via GitHub releases</li>
           </ul>
           <div class="platform-card__actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/ArchiveTune/releases/latest" rel="noopener"><svg class="icon"><use href="#i-download"/></svg>Stable</a>
-            <a class="btn btn-outline btn-sm" href="https://github.com/NatuneGroup/ArchiveTune/releases" rel="noopener">Nightly builds</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
+            <a class="btn btn-outline btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All builds</a>
           </div>
         </article>
-        <article class="platform-card platform-card--soon reveal">
-          <div class="platform-card__head"><svg class="icon"><use href="#i-laptop"/></svg><div><h3>Natune KMP</h3><span class="tag">In the works</span></div></div>
-          <p>A Kotlin Multiplatform + Compose Multiplatform port of Natune is in active development — one shared codebase, native feel on every screen.</p>
+        <article class="platform-card reveal">
+          <div class="platform-card__head"><svg class="icon"><use href="#i-laptop"/></svg><div><h3>Desktop &amp; iOS</h3><span class="tag">Nightly builds</span></div></div>
+          <p>The Kotlin Multiplatform port brings Natune to Windows, macOS, Linux and iOS — one shared codebase with native adapters, so the app feels at home on every screen. iOS installs as an unsigned IPA via AltStore or SideStore.</p>
           <div class="kmp-pills">
             <span class="kmp-pill"><svg class="icon"><use href="#i-windows"/></svg>Windows</span>
             <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>macOS</span>
@@ -249,7 +261,8 @@
             <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>iOS</span>
           </div>
           <div class="platform-card__actions">
-            <a class="btn btn-tonal btn-sm" href="https://github.com/NatuneGroup/ArchiveTune-KMP" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>Follow development</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
+            <a class="btn btn-tonal btn-sm" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>Source</a>
           </div>
         </article>
       </div>
@@ -269,10 +282,10 @@
         <details class="reveal"><summary>Does it really play lossless audio?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — where the source and your subscription provide it, Natune streams FLAC up to hi-res (24-bit/192&nbsp;kHz on supported services like Tidal and Qobuz). With a USB DAC you can enable bit-perfect output so the stream reaches the DAC unaltered.</div></details>
         <details class="reveal"><summary>Do I need accounts for Tidal, Qobuz or Deezer?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">For full-quality streams, yes — each provider requires its own account and, for lossless tiers, a paid subscription. YouTube works without a sign-in for basic playback, and Telegram uses your own Telegram account. You choose which sources are enabled and in which order they are tried.</div></details>
         <details class="reveal"><summary>What is the Playback Pool?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">ArchivePool is a self-hostable community pool: contributors anonymously share Tidal/Qobuz instances and accounts, the pool health-checks them on a schedule and drops dead ones, and Natune auto-discovers the surviving sources at runtime. It is optional — the app works fine with only your own accounts.</div></details>
-        <details class="reveal"><summary>Is there an iOS or desktop version?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">In the works. Natune KMP — a Kotlin Multiplatform port for Windows, macOS, Linux and iOS — is under active development in <a href="https://github.com/NatuneGroup/ArchiveTune-KMP" rel="noopener">NatuneGroup/ArchiveTune-KMP</a>. There is no public beta date yet; watch <a href="/news/">the news feed</a> for announcements.</div></details>
-        <details class="reveal"><summary>Stable or Nightly — which should I install?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Stable is the recommended channel: tested releases you can always grab from <a href="https://github.com/NatuneGroup/ArchiveTune/releases/latest" rel="noopener">releases/latest</a>. Nightly builds (tagged <code>N…</code>) ship every merge — newest features, occasional bugs. You can install both side by side if the package names differ, otherwise keep a backup before switching.</div></details>
-        <details class="reveal"><summary>What data does Natune send?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Very little by default. The news feed is fetched from this site with a plain anonymous GET — no identifiers, no telemetry. The optional “listener presence” feature is strictly opt-in: while enabled and playing, the app sends a random rotating ID, platform and app version about every 15 minutes; country/city are derived server-side from IP and rounded to ~1&nbsp;km. It never sends what you play, your accounts, or your device ID — and opting out deletes the local ID. See <a href="https://github.com/NatuneGroup/ArchiveTune/blob/main/PRIVACY.md" rel="noopener">PRIVACY.md</a> for details.</div></details>
-        <details class="reveal"><summary>How do I report a bug or request a feature?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Open an issue on <a href="https://github.com/NatuneGroup/ArchiveTune/issues" rel="noopener">GitHub</a> — include your app version, Android version and steps to reproduce. For chat support, join the <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram group</a> or <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord server</a>.</div></details>
+        <details class="reveal"><summary>Is there an iOS or desktop version?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune is now one Kotlin Multiplatform app: nightly builds for Windows, macOS, Linux and iOS ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> alongside Android. Pick your platform in the download dialog — desktop builds install natively, iOS sideloads an unsigned IPA via AltStore or SideStore. The port is young, so expect rough edges and report what you find.</div></details>
+        <details class="reveal"><summary>Stable or Nightly — which should I install?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Right now every public build is a Nightly: builds tagged <code>N…</code> ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> for all five platforms at once — newest features, occasional bugs. A Stable channel returns once the multi-platform port settles; watch <a href="/news/">the news feed</a>. Keep a backup before switching channels.</div></details>
+        <details class="reveal"><summary>What data does Natune send?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Very little by default. The news feed is fetched from this site with a plain anonymous GET — no identifiers, no telemetry. The optional “listener presence” feature is strictly opt-in: while enabled and playing, the app sends a random rotating ID, platform and app version about every 15 minutes; country/city are derived server-side from IP and rounded to ~1&nbsp;km. It never sends what you play, your accounts, or your device ID — and opting out deletes the local ID. See <a href="https://github.com/NatuneGroup/ArchiveTune/blob/main/PRIVACY.md" rel="noopener">PRIVACY.md</a> (from the ArchiveTune codebase Natune grew out of) for details.</div></details>
+        <details class="reveal"><summary>How do I report a bug or request a feature?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Open an issue on <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">GitHub</a> — include your app version, platform and steps to reproduce. For chat support, join the <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram group</a> or <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord server</a>.</div></details>
         <details class="reveal"><summary>Can I donate or support the project?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">The most valuable contribution is a good bug report, a translation, or a pull request. If you want to support development financially, the maintainer accepts donations via <a href="https://github.com/sponsors/rukamori" rel="noopener">GitHub Sponsors</a> and <a href="https://ko-fi.com/rukamori" rel="noopener">Ko-fi</a>.</div></details>
         <details class="reveal"><summary>Does Natune work on Android TV?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — the same APK supports Android TV with a leanback-friendly interface, so you can browse and play from the couch.</div></details>
         <details class="reveal"><summary>Can I back up or move my library to a new phone?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune can export a backup of your settings, library and playlists from Settings → Backup, and restore it on another device or after a reinstall.</div></details>
@@ -285,21 +298,13 @@
     <div class="wrap">
       <span class="eyebrow eyebrow--center"><svg class="icon"><use href="#i-download"/></svg>Install</span>
       <h2 id="download-title" class="reveal">Get Natune</h2>
-      <p class="reveal">Grab the latest APK from GitHub releases — Stable for everyday listening, Nightly for the bleeding edge.</p>
-      <div class="channel-cards reveal">
-        <div class="channel-card">
-          <h3><svg class="icon"><use href="#i-shield"/></svg>Stable</h3>
-          <p>Tested releases, recommended.</p>
-          <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/ArchiveTune/releases/latest" rel="noopener">Latest stable</a>
-          <div class="ver" id="stable-ver">v15.0.0</div>
-        </div>
-        <div class="channel-card">
-          <h3><svg class="icon"><use href="#i-update"/></svg>Nightly</h3>
-          <p>Fresh builds, newest features.</p>
-          <a class="btn btn-tonal btn-sm" href="https://github.com/NatuneGroup/ArchiveTune/releases" rel="noopener">Browse nightly builds</a>
-          <div class="ver" id="nightly-ver">N-builds on every merge</div>
-        </div>
+      <p class="reveal">One app for Android, iOS, Windows, macOS and Linux. Pick your platform — the dialog matches the newest build on GitHub.</p>
+      <div class="download__actions reveal">
+        <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
+        <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
       </div>
+      <noscript><p class="download__note">JavaScript is off — download Natune straight from the <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases page</a>.</p></noscript>
+      <p class="reveal download__meta">Newest build <b id="dl-latest">N20261103</b> · nightly channel</p>
       <p class="download__note reveal">Natune does not host, upload, or distribute any music, videos or other media. It is a player that streams from sources you configure — Tidal, Qobuz, Deezer, YouTube, Telegram and others — using your own accounts and subscriptions where required. Natune is free software under GPL-3.0 and is not affiliated with Tidal, Qobuz, Deezer, YouTube, Telegram or Google.</p>
     </div>
   </section>
@@ -311,15 +316,15 @@
     <div class="footer__top">
       <div class="footer__brand">
         <a class="navbar__brand" href="/"><img src="/assets/img/logo.png" alt="" width="34" height="34">Natune</a>
-        <p>Every source. One player. An open-source music player for people who care about sound.</p>
+        <p>Every source. One player. An open-source music player for Android, iOS, Windows, macOS and Linux — Natune grew out of <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">ArchiveTune</a>.</p>
       </div>
       <div class="footer__cols">
         <div class="footer__col">
           <h4>Project</h4>
-          <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">Source <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune/releases" rel="noopener">Releases <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune/issues" rel="noopener">Issues <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune/blob/main/LICENSE" rel="noopener">GPL-3.0 <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune" rel="noopener">Source <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">Releases <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">Issues <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/blob/main/LICENSE" rel="noopener">GPL-3.0 <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://github.com/NatuneGroup/ArchiveTune/blob/main/PRIVACY.md" rel="noopener">Privacy <svg class="icon"><use href="#i-outward"/></svg></a>
         </div>
         <div class="footer__col">
@@ -327,13 +332,13 @@
           <a href="/news/">News</a>
           <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune-KMP" rel="noopener">Natune KMP <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">ArchiveTune <svg class="icon"><use href="#i-outward"/></svg></a>
         </div>
         <div class="footer__col">
           <h4>Get the app</h4>
-          <a href="https://github.com/NatuneGroup/ArchiveTune/releases/latest" rel="noopener">Stable APK <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune/releases" rel="noopener">Nightly builds <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://apt.izzysoft.de/fdroid/index/apk/moe.rukamori.archivetune" rel="noopener">IzzyOnDroid <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All platforms <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">Nightly builds <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">Report an issue <svg class="icon"><use href="#i-outward"/></svg></a>
         </div>
       </div>
     </div>
@@ -343,6 +348,45 @@
     </div>
   </div>
 </footer>
+
+<!-- ===================== DOWNLOAD DIALOG ===================== -->
+<div class="dlmodal" id="dlmodal" hidden>
+  <div class="dlmodal__backdrop" data-dl-close></div>
+  <div class="dlmodal__panel" role="dialog" aria-modal="true" aria-labelledby="dlmodal-title">
+    <div class="dlmodal__head">
+      <div>
+        <h2 id="dlmodal-title">Download Natune</h2>
+        <p class="dlmodal__sub" id="dlmodal-sub">Pick your platform — we match the newest build on GitHub.</p>
+      </div>
+      <button type="button" class="dlmodal__close" data-dl-close aria-label="Close download dialog">
+        <svg class="icon"><use href="#i-close"/></svg>
+      </button>
+    </div>
+    <div class="dlmodal__tabs" role="group" aria-label="Choose a platform">
+      <button type="button" class="dlmodal__tab" data-platform="android" aria-pressed="false">
+        <svg class="icon"><use href="#i-phone"/></svg><span>Android</span><small>APK</small>
+      </button>
+      <button type="button" class="dlmodal__tab" data-platform="ios" aria-pressed="false">
+        <svg class="icon"><use href="#i-apple"/></svg><span>iOS</span><small>IPA</small>
+      </button>
+      <button type="button" class="dlmodal__tab" data-platform="linux" aria-pressed="false">
+        <svg class="icon"><use href="#i-terminal"/></svg><span>Linux</span><small>.deb / AppImage</small>
+      </button>
+      <button type="button" class="dlmodal__tab" data-platform="macos" aria-pressed="false">
+        <svg class="icon"><use href="#i-laptop"/></svg><span>macOS</span><small>DMG</small>
+      </button>
+      <button type="button" class="dlmodal__tab" data-platform="windows" aria-pressed="false">
+        <svg class="icon"><use href="#i-windows"/></svg><span>Windows</span><small>.exe / .zip</small>
+      </button>
+    </div>
+    <h3 class="dlmodal__h">Install</h3>
+    <ol class="dlmodal__steps" id="dl-steps"></ol>
+    <h3 class="dlmodal__h">Download</h3>
+    <div class="dlmodal__links" id="dl-links"><p class="dlmodal__hint">Loading the newest build…</p></div>
+    <p class="dlmodal__hint" id="dl-hint"></p>
+    <p class="dlmodal__foot">Every build is published on <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a>. All current builds are rolling nightlies — a stable channel returns when the multi-platform port settles.</p>
+  </div>
+</div>
 
 <script src="/assets/js/site.js" defer></script>
 </body>
