@@ -5,6 +5,7 @@
 //   2) the mobile drawer never leaves focus inside a hidden element: when the
 //      burger (its only trigger) becomes display:none on resize, the drawer
 //      closes and focus lands on a visible element.
+//   3) privacy and announcement links target the current public Natune repo.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -44,6 +45,30 @@ const openDialog = async (window) => {
     .dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true }));
   await sleep(40);
 };
+
+console.log('== public links: current Natune repository ==');
+
+{
+  const dom = new JSDOM(html, { url: 'https://natune.pages.dev/' });
+  const d = dom.window.document;
+  // The public privacy file is on dev; main currently has no PRIVACY.md.
+  const privacyUrl = 'https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md';
+  const faqPrivacy = [...d.querySelectorAll('#faq a[href$="/PRIVACY.md"]')];
+  const footerPrivacy = [...d.querySelectorAll('.footer a[href$="/PRIVACY.md"]')];
+  ok(faqPrivacy.length === 1 && faqPrivacy[0].href === privacyUrl,
+    'FAQ links to the public Natune privacy notice');
+  ok(footerPrivacy.length === 1 && footerPrivacy[0].href === privacyUrl,
+    'footer links to the same public Natune privacy notice');
+  dom.window.close();
+
+  const welcome = read('public/api/news/content/welcome-natune.md');
+  ok(welcome.includes('[GitHub releases](https://github.com/NatuneGroup/Natune/releases)'),
+    'welcome announcement links to Natune releases');
+  ok(welcome.includes('[NatuneGroup/Natune](https://github.com/NatuneGroup/Natune)'),
+    'welcome announcement links to the current public source repository');
+  ok(!/https:\/\/github\.com\/NatuneGroup\/ArchiveTune(?:-KMP)?(?:[\/)#?\s]|$)/i.test(welcome),
+    'welcome announcement has no obsolete app repository URLs');
+}
 
 console.log('== download dialog: asset URL allow-list ==');
 
