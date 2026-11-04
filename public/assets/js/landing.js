@@ -22,7 +22,12 @@
     tiles.forEach((tile) => {
       const image = tile.querySelector('img');
       if (!image) return;
-      image.src = sourceFor(tile.dataset.previewDevice);
+      const source = sourceFor(tile.dataset.previewDevice);
+      if (image.getAttribute('src') !== source) {
+        image.classList.add('is-loading');
+        image.addEventListener('load', () => image.classList.remove('is-loading'), { once: true });
+        image.src = source;
+      }
       image.alt = altFor(tile.dataset.previewDevice);
     });
     if (openDevice && dialog?.open) {
