@@ -255,6 +255,7 @@ img { display: block; max-width: 100%; height: auto; }
 .lyric-letter { display: inline-block; white-space: pre; color: transparent; background-image: linear-gradient(90deg, var(--bright, var(--lyrics-color)) var(--edge-a, 0%), var(--dim, var(--lyrics-color)) var(--edge-b, 0%)); -webkit-background-clip: text; background-clip: text; translate: 0 calc(var(--bump, 0) * -2px); scale: var(--bump-scale, 1); }
 .lyrics-dots { position: absolute; left: 0; right: 0; top: 35%; translate: 0 -50%; display: flex; justify-content: center; gap: 6px; opacity: var(--dots-visible, 0); transition: opacity 200ms linear; }
 .lyrics-dots span { width: 10px; height: 10px; border-radius: 50%; background: currentColor; opacity: var(--dot-light, .25); scale: var(--dots-breath, 1); }
+.features__card--2 .lyrics-note { max-width: none; color: color-mix(in srgb, var(--lyrics-color) 74%, transparent); font: 600 .8125rem / 1.35 var(--font); letter-spacing: .01em; }
 
 .platforms { position: relative; isolation: isolate; background: var(--surface); overflow: hidden; }
 .platforms::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('/assets/img/platform-pattern.svg') 0 0 / 666px; pointer-events: none; }

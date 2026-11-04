@@ -1,5 +1,6 @@
 // Enhanced lyrics demo. One playback clock drives every effect, and each value is a pure function of
-// the position, so a seek lands on the right frame. The tuning mirrors shared-ui: LyricsSweepGeometry
+// the position, so a seek lands on the right frame. Only a line change reached by playing glides; a seek, a resize
+// or a reduced-motion change snaps, so the same position always paints the same frame. The tuning mirrors shared-ui: LyricsSweepGeometry
 // (feathered sweep, completion lift, glow envelope), LyricsEmphasis (held-word letter ripple),
 // LyricsInterlude (dots), LyricsDepth and LyricsLineSettle (row depth and stagger).
 (() => {
@@ -228,6 +229,7 @@
   let onScreen = true;
   let activeIndex = -1;
   let lastTrackY = 0;
+  let layoutPending = true;
   let settleDelta = 0;
   let settleStart = -Infinity;
 
@@ -244,6 +246,8 @@
       });
     });
     if (viewport) viewport.height = viewport.clientHeight;
+    // Every measurement invalidates the anchor: a row and the viewport can both move even when the line stays put.
+    layoutPending = true;
   };
 
   const activeRowAt = (position) => {
@@ -262,22 +266,30 @@
     });
   };
 
-  const render = () => {
+  // `snap` marks a discontinuity such as a seek: the picture jumps to the target frame and no wall-clock settle
+  // starts, so two seeks to the same position paint the same frame while stopped or playing.
+  const render = (snap = false) => {
     const reduced = reduceMotion();
     const index = activeRowAt(positionMs);
     const height = viewport && viewport.height ? viewport.height : 0;
-    const activeRow = rows[index];
+    const primaryRow = rows[index];
+    const rowChanged = index !== activeIndex;
+    const layoutChanged = layoutPending;
+    layoutPending = false;
 
-    if (index !== activeIndex) {
+    // The anchor is a function of the geometry as much as of the line, so a new measurement re-anchors the current
+    // row too, and the stale settle is dropped instead of replaying against the old offsets.
+    if (rowChanged || layoutChanged) {
       const previousY = lastTrackY;
       const firstHandoff = activeIndex < 0;
-      const targetY = activeRow && height
-        ? Math.round(height * ANCHOR - activeRow.offsetTop)
+      const targetY = primaryRow && height
+        ? Math.round(height * ANCHOR - primaryRow.offsetTop)
         : 0;
       lastTrackY = targetY;
       activeIndex = index;
-      settleDelta = reduced || firstHandoff ? 0 : previousY - targetY;
-      settleStart = performance.now();
+      const glides = rowChanged && !firstHandoff && !layoutChanged && !snap && !reduced;
+      settleDelta = glides ? previousY - targetY : 0;
+      settleStart = glides ? performance.now() : -Infinity;
       if (track) track.style.setProperty('--track-y', `${targetY}px`);
     }
     if (height && track) track.style.setProperty('--track-y', `${lastTrackY}px`);
@@ -287,13 +299,17 @@
       : 0;
 
     rows.forEach((row) => {
-      const isActive = row.index === index;
-      const isPassed = index >= 0 && row.index < index;
+      // Each row owns its span: it is active from its activation lead and passed only after its own last word, so
+      // overlapping lines stay active together while the newest one remains the row that scrolls.
+      const active = positionMs >= row.activationMs && positionMs < row.endMs;
+      const isPassed = positionMs >= row.endMs;
+      // The newest line keeps the playhead slot through an interlude, when every row has ended.
+      const isActive = active || (index >= 0 && row.index === index);
       const distance = index < 0 ? null : Math.abs(row.index - index);
-      const depth = math.depth(isActive ? 0 : distance, reduced);
+      const depth = math.depth(active ? 0 : distance, reduced);
       row.element.classList.toggle('is-active', isActive);
       row.element.classList.toggle('is-passed', isPassed);
-      row.element.style.setProperty('--row-scale', isActive ? ACTIVE_SCALE : depth.scale.toFixed(3));
+      row.element.style.setProperty('--row-scale', active ? ACTIVE_SCALE : depth.scale.toFixed(3));
       row.element.style.setProperty('--row-alpha', (isActive ? 1 - interludeFade : depth.alpha).toFixed(3));
       const ink = isPassed ? PASSED_ALPHA : IDLE_ALPHA;
       row.element.style.setProperty('--ink', String(ink));
@@ -319,7 +335,7 @@
           letter.element.style.setProperty('--edge-b', `${(edgeB * 100).toFixed(2)}%`);
         });
 
-        const drop = isActive
+        const drop = active
           ? math.dropAt(row.startMs, word.startMs, word.endMs, word.nextStartMs, positionMs, reduced) * WORD_LIFT_DP
           : 0;
         word.element.style.setProperty('--drop', `${drop.toFixed(2)}px`);
@@ -385,9 +401,9 @@
     if (!toggle) return;
     const paused = userPaused;
     toggle.setAttribute('aria-pressed', String(paused));
-    toggle.setAttribute('aria-label', paused ? 'Play lyrics preview' : 'Pause lyrics preview');
+    toggle.setAttribute('aria-label', paused ? 'Play enhanced lyrics demo' : 'Pause enhanced lyrics demo');
     toggle.querySelector('span').textContent = paused ? 'play_arrow' : 'pause';
-    if (live) live.textContent = paused ? 'Lyrics preview paused' : 'Lyrics preview playing';
+    if (live) live.textContent = paused ? 'Enhanced lyrics demo paused' : 'Enhanced lyrics demo playing';
   };
   const play = () => { userPaused = false; syncToggle(); start(); };
   const pause = () => { userPaused = true; settleDelta = 0; syncToggle(); stop(); render(); };
@@ -405,7 +421,11 @@
     });
     observer.observe(viewport);
   }
-  window.addEventListener('resize', () => { measure(); render(); });
+  const remeasure = () => { measure(); render(); };
+  window.addEventListener('resize', remeasure);
+  // Container-query and font-driven size changes do not always fire a window resize, so watch the box as well.
+  if ('ResizeObserver' in window && viewport) new ResizeObserver(remeasure).observe(viewport);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure, () => {});
   motionQuery?.addEventListener?.('change', () => render());
 
   measure();
@@ -421,7 +441,8 @@
     seek(ms) {
       positionMs = ((ms % durationMs) + durationMs) % durationMs;
       settleDelta = 0;
-      render();
+      settleStart = -Infinity;
+      render(true);
     },
     tick(ms) {
       positionMs = (positionMs + ms) % durationMs;

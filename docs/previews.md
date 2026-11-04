@@ -45,7 +45,7 @@ for name in ("home-light-clean-1440x900", "library-empty-light-1440x900"):
     with Image.open(name + ".png") as im:
         im = im.convert("RGB")
         for width in (1440, 720):
-            frame = im if width == im.width else im.resize((width, width * 9 // 16), Image.LANCZOS)
+            frame = im if width == im.width else im.resize((width, width * im.height // im.width), Image.LANCZOS)
             frame.save(f"{out}-{width}.webp", "WEBP", quality=82, method=6)
 PY
 ```

@@ -167,6 +167,22 @@ await check('desktop previews are the real packaged Linux captures, not illustra
     assert.ok(!/^desktop-player-.*\.webp$/.test(name), `a player capture would misstate what was recorded: ${name}`);
   }
   assert.equal((read('public/assets/css/landing.css').match(/--preview-ratio: 1440 \/ 900/g) || []).length, 2, 'the tile and the lightbox share the capture ratio');
+  assert.ok(read('docs/previews.md').includes('width * im.height // im.width'), 'the documented WebP recipe keeps the source ratio');
+  dom.window.close();
+});
+await check('the lyrics card says in visible copy that it is an authored demo', () => {
+  const dom = new JSDOM(html);
+  const d = dom.window.document;
+  const note = d.querySelector('[data-lyrics-note]');
+  assert.ok(note, 'the card carries the demo copy');
+  assert.equal(note.textContent.trim(), 'Enhanced lyrics demo · illustrative timing, no audio');
+  assert.ok(!note.classList.contains('sr-only'), 'the copy is visible, not screen-reader only');
+  assert.ok(!note.closest('[data-lyrics-demo]'), 'the copy sits outside the animated viewport');
+  assert.ok(note.closest('.features__card--2'), 'the copy belongs to the lyrics card');
+  assert.ok(read('public/assets/css/landing.css').includes('.features__card--2 .lyrics-note'), 'the copy is styled as a caption');
+  assert.equal(d.querySelector('.lyrics-track').getAttribute('aria-label'), 'Enhanced lyrics demo', 'the accessible name matches the visible label');
+  assert.equal(d.querySelector('[data-lyrics-toggle]').getAttribute('aria-label'), 'Pause enhanced lyrics demo', 'the control agrees with it');
+  assert.equal(d.querySelector('[data-lyrics-status]').textContent, 'Enhanced lyrics demo playing');
   dom.window.close();
 });
 await check('device lightbox preserves aspect ratio, full-size source and focus', () => {
@@ -283,16 +299,103 @@ await check('enhanced lyrics: one clock moves the sweep, rows and dots', () => {
   assert.equal(d.querySelector('.lyric-row.is-active').textContent.replace(/\s+/g, ' ').trim(), 'Hold the light', 'the wrapped loop starts the first line again');
   app.close();
 });
+await check('enhanced lyrics: overlapping lines stay active until their own timed end', () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const rows = [...d.querySelectorAll('.lyric-row')];
+  app.demo.seek(2220);
+  assert.equal(app.demo.state().activeIndex, 1, 'the next line activates 480 ms before its first word');
+  assert.ok(rows[0].classList.contains('is-active'), 'the held line is still sung at 2220 ms');
+  assert.ok(!rows[0].classList.contains('is-passed'), 'a line is not passed before its own last word');
+  app.demo.seek(2300);
+  assert.equal(rows[0].style.getPropertyValue('--ink'), '0.4', 'an active line keeps ENHANCED idle ink');
+  assert.equal(rows[0].style.getPropertyValue('--dim'), 'color-mix(in srgb, var(--lyrics-color) 40%, transparent)');
+  assert.equal(rows[0].style.getPropertyValue('--bright'), 'var(--lyrics-color)', 'a sung active line is not capped at 70% bright ink');
+  assert.equal(rows[0].style.getPropertyValue('--row-scale'), String(1.05), 'both overlapping lines keep the active scale');
+  assert.equal(rows[0].style.getPropertyValue('--row-alpha'), '1.000', 'the held line has not faded yet');
+  assert.ok(rows[1].classList.contains('is-active'), 'the arriving line is active too');
+  app.demo.seek(2499);
+  assert.ok(rows[0].classList.contains('is-active'), 'the overlap runs until 2500 ms');
+  app.demo.seek(2500);
+  assert.ok(!rows[0].classList.contains('is-active'), 'the line ends at its own end');
+  assert.ok(rows[0].classList.contains('is-passed'), 'and only then is it passed');
+  assert.equal(rows[0].style.getPropertyValue('--ink'), '0.7', 'a passed line drops to PASSED_ALPHA');
+  assert.ok(rows[0].style.getPropertyValue('--bright').includes('70%'), 'a passed line dims its bright ink');
+  app.close();
+});
+await check('enhanced lyrics: a resize re-anchors the row that is already current', () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const viewport = d.querySelector('.lyrics-viewport');
+  const rowElements = [...d.querySelectorAll('.lyric-row')];
+  const metrics = { height: 167, tops: [0, 39, 79, 157] };
+  Object.defineProperty(viewport, 'clientHeight', { configurable: true, get: () => metrics.height });
+  rowElements.forEach((element, index) => Object.defineProperty(element, 'offsetTop', {
+    configurable: true,
+    get: () => metrics.tops[index],
+  }));
+  const anchor = () => d.querySelector('.lyrics-track').style.getPropertyValue('--track-y');
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  app.demo.seek(19000);
+  assert.equal(app.demo.state().activeIndex, 3, 'the last line is current');
+  assert.equal(anchor(), `${Math.round(167 * 0.35 - 157)}px`, '1440 px lays the last line on the 35% anchor');
+  assert.equal(anchor(), '-99px');
+  metrics.height = 150;
+  metrics.tops = [0, 27, 54, 108];
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  assert.equal(app.demo.state().activeIndex, 3, 'the same line is still current after the resize');
+  assert.equal(anchor(), `${Math.round(150 * 0.35 - 108)}px`, '390 px re-anchors the same line instead of leaving it in its fade');
+  assert.equal(anchor(), '-55px');
+  assert.equal(rowElements[0].style.getPropertyValue('--settle-y'), '0.00px', 'a layout change starts no settle');
+  app.demo.pause();
+  assert.equal(app.demo.state().running, false, 'a paused card still re-anchors');
+  metrics.height = 167;
+  metrics.tops = [0, 39, 79, 157];
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  assert.equal(anchor(), '-99px', 'the paused card re-anchors back');
+  app.close();
+});
+await check('enhanced lyrics: a seek snaps, so repeated seeks paint the same frame', () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const viewport = d.querySelector('.lyrics-viewport');
+  const rowElements = [...d.querySelectorAll('.lyric-row')];
+  Object.defineProperty(viewport, 'clientHeight', { configurable: true, get: () => 167 });
+  rowElements.forEach((element, index) => Object.defineProperty(element, 'offsetTop', { configurable: true, get: () => [0, 39, 79, 157][index] }));
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  const frameNow = () => ({
+    settles: rowElements.map((row) => row.style.getPropertyValue('--settle-y')),
+    track: d.querySelector('.lyrics-track').style.getPropertyValue('--track-y'),
+    position: app.demo.position(),
+  });
+  assert.equal(app.demo.state().running, true, 'the demo autoplays');
+  app.demo.pause();
+  app.demo.seek(0);
+  app.demo.play();
+  assert.equal(app.demo.state().running, true, 'the seek lands while playing');
+  app.demo.seek(2600);
+  const playing = frameNow();
+  assert.deepEqual(playing.settles, ['0.00px', '0.00px', '0.00px', '0.00px'], 'a seek starts no wall-clock settle');
+  assert.equal(playing.track, '19px', 'the seek anchors the arriving line');
+  app.demo.seek(2600);
+  assert.deepEqual(frameNow(), playing, 'the same seek in the same run paints the same frame');
+  app.demo.pause();
+  app.demo.seek(2600);
+  assert.deepEqual(frameNow(), playing, 'paused and playing agree on the frame');
+  app.demo.seek(2600);
+  assert.deepEqual(frameNow(), playing, 'a repeated paused seek is identical too');
+  app.close();
+});
 await check('enhanced lyrics: play, pause, hidden and offscreen all stop the clock', async () => {
   const app = makeWindow();
   const d = app.window.document;
   const toggle = d.querySelector('[data-lyrics-toggle]');
   assert.equal(toggle.getAttribute('aria-pressed'), 'false');
-  assert.equal(toggle.getAttribute('aria-label'), 'Pause lyrics preview');
+  assert.equal(toggle.getAttribute('aria-label'), 'Pause enhanced lyrics demo');
   app.demo.seek(1000);
   click(app.window, '[data-lyrics-toggle]');
   assert.equal(toggle.getAttribute('aria-pressed'), 'true', 'the toggle reports paused');
-  assert.equal(toggle.getAttribute('aria-label'), 'Play lyrics preview', 'the label flips');
+  assert.equal(toggle.getAttribute('aria-label'), 'Play enhanced lyrics demo', 'the label flips');
   assert.equal(app.demo.state().running, false, 'the clock stops when paused');
   const frozen = app.demo.position();
   app.demo.tick(0);
