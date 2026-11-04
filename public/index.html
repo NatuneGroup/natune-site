@@ -128,11 +128,18 @@
           <ul class="features__providers" aria-label="Example music providers"><li>YouTube Music</li><li>Tidal</li><li>Qobuz</li><li>Deezer</li><li>Telegram</li><li>ArchivePool</li></ul>
         </article>
         <article class="features__card features__card--2">
-          <div class="features__top"><div class="features__icon feature-shape feature-shape--oval"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">lyrics</span></div><span class="features__label">Word-synced lyrics</span><button class="lyrics-toggle" type="button" aria-label="Pause lyrics animation" aria-pressed="false"><span class="material-symbols-rounded" aria-hidden="true">pause</span></button></div>
-          <div class="features__lyrics" aria-hidden="true">
-            <div class="lyrics-line"><span class="lyrics-word">Every</span><span class="lyrics-word">source</span><span class="lyrics-word">one</span><span class="lyrics-word">player</span></div>
-            <div class="lyrics-line"><span class="lyrics-word">Find</span><span class="lyrics-word">your</span><span class="lyrics-word">own</span><span class="lyrics-word">rhythm</span></div>
-            <div class="lyrics-line"><span class="lyrics-word">Take</span><span class="lyrics-word">the</span><span class="lyrics-word">music</span><span class="lyrics-word">with</span><span class="lyrics-word">you</span></div>
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--oval"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">lyrics</span></div><span class="features__label">Word-synced lyrics</span><button class="lyrics-toggle" type="button" data-lyrics-toggle aria-label="Pause lyrics preview" aria-pressed="false"><span class="material-symbols-rounded" aria-hidden="true">pause</span></button></div>
+          <div class="features__lyrics" data-lyrics-demo>
+            <div class="lyrics-viewport">
+              <ol class="lyrics-track" aria-label="Word-synced lyrics preview">
+                <li class="lyric-row"><span class="lyric-word" data-start="0" data-end="800">Hold</span> <span class="lyric-word" data-start="800" data-end="1050">the</span> <span class="lyric-word" data-start="1050" data-end="2500">light</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="2700" data-end="3100">till</span> <span class="lyric-word" data-start="3100" data-end="3320">the</span> <span class="lyric-word" data-start="3320" data-end="4700">morning</span> <span class="lyric-word" data-start="4700" data-end="5300">finds</span> <span class="lyric-word" data-start="5300" data-end="5900">us</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="15100" data-end="16300">Every</span> <span class="lyric-word" data-start="16300" data-end="16900">road</span> <span class="lyric-word" data-start="16900" data-end="17100">we</span> <span class="lyric-word" data-start="17100" data-end="17700">sings</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="17900" data-end="18150">the</span> <span class="lyric-word" data-start="18150" data-end="18900">same</span> <span class="lyric-word" data-start="18900" data-end="20600">refrain</span></li>
+              </ol>
+              <div class="lyrics-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+            <p class="sr-only" data-lyrics-status aria-live="polite">Lyrics preview playing</p>
           </div>
           <div class="features__copy"><h3>Every word, right on time</h3><p>Follow word-by-word timing, with translation and romanization when your lyrics provider supports them.</p></div>
         </article>
@@ -242,5 +249,6 @@
 </dialog>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/landing.js" defer></script>
+<script src="/assets/js/lyrics-demo.js" defer></script>
 </body>
 </html>

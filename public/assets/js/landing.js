@@ -69,20 +69,6 @@
     lastFocused?.focus({ preventScroll: true });
   });
 
-  const features = document.getElementById('features');
-  const toggle = document.querySelector('.lyrics-toggle');
-  toggle?.addEventListener('click', () => {
-    const paused = features.classList.toggle('is-paused');
-    toggle.setAttribute('aria-pressed', String(paused));
-    toggle.setAttribute('aria-label', paused ? 'Resume lyrics animation' : 'Pause lyrics animation');
-    toggle.querySelector('span').textContent = paused ? 'play_arrow' : 'pause';
-  });
-  if (features && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(([entry]) => {
-      features.classList.toggle('is-offscreen', !entry.isIntersecting);
-    });
-    observer.observe(features);
-  }
 
   const navLinks = [...document.querySelectorAll('.navbar__links a[href*="#"], .navbar__drawer a[href*="#"]')];
   if ('IntersectionObserver' in window) {
