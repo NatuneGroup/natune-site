@@ -1,0 +1,8 @@
+Google Sans Flex is Copyright 2015 The Google Sans Flex Authors
+(https://github.com/googlefonts/googlesans-flex), licensed under SIL OFL 1.1.
+The bundled rounded variable build exposes opsz, wght and ROND axes.
+See googlesansflex.LICENSE.txt.
+
+Material Symbols Rounded is Copyright Google LLC, licensed under Apache 2.0.
+The bundled symbol subset has been converted from TrueType to WOFF2 without
+changing glyphs. See material-symbols.LICENSE.txt.

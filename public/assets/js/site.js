@@ -12,6 +12,7 @@
     const setDrawer = (open) => {
       drawer.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       burger.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
     };
     const burgerVisible = () => window.getComputedStyle(burger).display !== 'none';
@@ -38,6 +39,12 @@
       if (focusInside) refocusAfterDrawer();
     };
     window.addEventListener('resize', onResize);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && drawer.classList.contains('is-open')) {
+        setDrawer(false);
+        refocusAfterDrawer();
+      }
+    });
   }
 
   const io = new IntersectionObserver(
@@ -93,7 +100,13 @@
   const latestTag = document.getElementById('dl-latest');
   fetch(GH_API, { headers: GH_HEADERS })
     .then((r) => (r.ok ? r.json() : null))
-    .then((d) => { if (d && stars) stars.textContent = d.stargazers_count.toLocaleString('en-US'); })
+    .then((d) => {
+      if (stars && Number.isFinite(d?.stargazers_count)) {
+        stars.textContent = d.stargazers_count >= 10000
+          ? `${Math.round(d.stargazers_count / 1000)}K`
+          : d.stargazers_count.toLocaleString('en-US');
+      }
+    })
     .catch(() => {});
   loadReleases().then((list) => {
     const rel = newestAppRelease(list);
@@ -233,9 +246,13 @@
     el.appendChild(p);
   };
 
+  let renderRequest = 0;
   const renderLinks = async (key) => {
+    const request = ++renderRequest;
     linksEl.innerHTML = '<p class="dlmodal__hint">Loading the newest build…</p>';
     const list = await loadReleases();
+    // A slow release request must not overwrite a newer platform selection.
+    if (request !== renderRequest) return;
     const resolved = resolvePlatform(list, key);
     linksEl.textContent = '';
     if (!resolved) {
@@ -269,6 +286,7 @@
 
   let current = detectPlatform();
   const selectPlatform = (key, { focus = false } = {}) => {
+    if (!Object.hasOwn(PLATFORMS, key)) return;
     current = key;
     tabs.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.platform === key)));
     renderSteps(key);
@@ -282,23 +300,35 @@
 
   let lastFocused = null;
   const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-  const openDl = () => {
-    lastFocused = document.activeElement;
+  const background = [...document.body.children].filter((el) => el !== modal && !['SCRIPT', 'SVG'].includes(el.tagName));
+  const inertState = new Map();
+  const openDl = (opener) => {
+    lastFocused = opener || document.activeElement;
+    background.forEach((el) => {
+      inertState.set(el, el.inert);
+      el.inert = true;
+    });
     modal.hidden = false;
     document.body.classList.add('dl-open');
-    selectPlatform(current, { focus: true });
+    selectPlatform(opener?.dataset.dlPlatform || current, { focus: true });
   };
   const closeDl = () => {
     modal.hidden = true;
     document.body.classList.remove('dl-open');
+    inertState.forEach((value, el) => { el.inert = value; });
+    inertState.clear();
     if (subEl) subEl.textContent = SUB_DEFAULT;
-    if (lastFocused && lastFocused.focus) lastFocused.focus();
+    let target = lastFocused;
+    if (drawer?.contains(target) && !drawer.classList.contains('is-open')) {
+      target = window.getComputedStyle(burger).display !== 'none' ? burger : document.getElementById('main');
+    }
+    if (target?.isConnected) target.focus({ preventScroll: true });
   };
 
   document.querySelectorAll('[data-dl-open]').forEach((el) =>
     el.addEventListener('click', (e) => {
       e.preventDefault();
-      openDl();
+      openDl(el);
     })
   );
   modal.addEventListener('click', (e) => {
