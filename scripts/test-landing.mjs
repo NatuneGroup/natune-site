@@ -193,6 +193,61 @@ await check('mobile download restores focus to the visible menu trigger', async 
   assert.equal(d.activeElement, d.getElementById('burger'));
   app.close();
 });
+await check('desktop download restores focus to its visible opener on Escape', async () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const opener = d.querySelector('.navbar__links [data-dl-open]');
+  d.getElementById('burger').style.display = 'none';
+  opener.focus();
+  click(app.window, '.navbar__links [data-dl-open]');
+  await settle();
+  assert.ok(d.getElementById('dlmodal').contains(d.activeElement));
+  d.dispatchEvent(new app.window.KeyboardEvent('keydown', { key: 'Escape' }));
+  assert.ok(d.getElementById('dlmodal').hidden);
+  assert.equal(d.activeElement, opener);
+  app.close();
+});
+await check('desktop-to-mobile resize during download restores focus to the visible burger', async () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const nav = d.querySelector('.navbar__links');
+  const burger = d.getElementById('burger');
+  nav.style.display = 'flex';
+  burger.style.display = 'none';
+  click(app.window, '.navbar__links [data-dl-open]');
+  await settle();
+  assert.ok(d.getElementById('dlmodal').contains(d.activeElement));
+  // jsdom has no media-query layout; hide the opener's ancestor at the breakpoint.
+  nav.style.display = 'none';
+  burger.style.display = 'inline-flex';
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  d.dispatchEvent(new app.window.KeyboardEvent('keydown', { key: 'Escape' }));
+  assert.ok(d.getElementById('dlmodal').hidden);
+  assert.ok(!d.getElementById('navbar').inert);
+  assert.equal(d.activeElement, burger);
+  app.close();
+});
+await check('download falls back to main when neither opener nor burger can take focus', async () => {
+  for (const unavailable of ['hidden', 'disabled', 'inert']) {
+    const app = makeWindow();
+    const d = app.window.document;
+    const nav = d.querySelector('.navbar__links');
+    const burger = d.getElementById('burger');
+    const main = d.getElementById('main');
+    main.removeAttribute('tabindex');
+    click(app.window, '.navbar__links [data-dl-open]');
+    await settle();
+    nav.style.display = 'none';
+    if (unavailable === 'hidden') burger.style.visibility = 'hidden';
+    if (unavailable === 'disabled') burger.disabled = true;
+    if (unavailable === 'inert') burger.inert = true;
+    d.dispatchEvent(new app.window.KeyboardEvent('keydown', { key: 'Escape' }));
+    assert.ok(d.getElementById('dlmodal').hidden);
+    assert.equal(main.getAttribute('tabindex'), '-1');
+    assert.equal(d.activeElement, main, unavailable);
+    app.close();
+  }
+});
 await check('downloads and previews still work without IntersectionObserver', async () => {
   const app = makeWindow({ observer: false });
   click(app.window, '.hero__actions [data-dl-open]');

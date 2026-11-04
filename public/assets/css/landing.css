@@ -161,11 +161,11 @@ img { display: block; max-width: 100%; height: auto; }
 .hero__signal-icon { position: absolute; top: 18px; right: 18px; z-index: -1; opacity: .12; color: currentColor; font-size: clamp(96px, 10vw, 136px); transform: rotate(-8deg); }
 .hero__signal strong { display: block; margin-bottom: 10px; font: var(--headline-medium); letter-spacing: -.015em; }
 .hero__signal p { font: var(--body-medium); letter-spacing: .005em; }
-.hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.hero__stats { display: grid; grid-template-columns: max-content max-content minmax(0, 1fr); gap: 10px; }
 .hero__stats div { min-width: 0; }
 .hero__stats dt { margin-bottom: 3px; font: var(--label-small); font-variation-settings: 'ROND' 100; letter-spacing: .08em; }
 .hero__stats dd { min-height: 20px; font: var(--title-medium); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-#hero-version { font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#hero-version { white-space: normal; }
 
 .showcase { background: var(--surface); padding: 44px 0 92px; }
 .showcase__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 28px; }

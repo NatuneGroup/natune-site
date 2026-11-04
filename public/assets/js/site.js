@@ -304,6 +304,15 @@
 
   let lastFocused = null;
   const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  const canRestoreFocus = (el) => {
+    if (!el?.isConnected || el.matches(':disabled') || (!el.matches(FOCUSABLE) && !el.hasAttribute('tabindex'))) return false;
+    if (drawer?.contains(el) && !drawer.classList.contains('is-open')) return false;
+    for (let parent = el; parent; parent = parent.parentElement) {
+      const style = window.getComputedStyle(parent);
+      if (parent.hidden || parent.inert || style.display === 'none' || ['hidden', 'collapse'].includes(style.visibility)) return false;
+    }
+    return true;
+  };
   const background = [...document.body.children].filter((el) => el !== modal && !['SCRIPT', 'SVG'].includes(el.tagName));
   const inertState = new Map();
   const openDl = (opener) => {
@@ -325,11 +334,12 @@
     inertState.forEach((value, el) => { el.inert = value; });
     inertState.clear();
     if (subEl) subEl.textContent = SUB_DEFAULT;
-    let target = lastFocused;
-    if (drawer?.contains(target) && !drawer.classList.contains('is-open')) {
-      target = window.getComputedStyle(burger).display !== 'none' ? burger : document.getElementById('main');
+    // A resize can hide the original opener while the dialog is open.
+    const target = canRestoreFocus(lastFocused) ? lastFocused : canRestoreFocus(burger) ? burger : document.getElementById('main');
+    if (target && target !== lastFocused && target !== burger && !target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
     }
-    if (target?.isConnected) target.focus({ preventScroll: true });
+    if (canRestoreFocus(target)) target.focus({ preventScroll: true });
   };
 
   document.querySelectorAll('[data-dl-open]').forEach((el) =>
