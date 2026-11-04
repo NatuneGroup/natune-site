@@ -103,17 +103,71 @@ await check('Home, Library and Player switch every device to a valid local previ
     assert.equal(d.querySelectorAll('[data-preview-view][aria-pressed="true"]').length, 1);
     for (const tile of d.querySelectorAll('[data-preview-device]')) {
       const image = tile.querySelector('img');
-      assert.ok(image.getAttribute('src').includes(`-${view}`));
+      const device = tile.dataset.previewDevice;
+      if (device === 'desktop' && view !== 'player') {
+        assert.equal(image.getAttribute('src'), `/assets/previews/desktop-${view}-linux-1440.webp`);
+        assert.ok(image.getAttribute('srcset').includes(`desktop-${view}-linux-720.webp 720w`), 'the capture offers a small candidate');
+        assert.ok(image.getAttribute('sizes'), 'the capture declares its rendered size');
+        assert.ok(image.alt.startsWith(`Natune ${view === 'home' ? 'Home' : 'Library'} on Linux`), image.alt);
+      } else {
+        assert.ok(image.getAttribute('src').includes(`-${view}`), image.getAttribute('src'));
+        assert.equal(image.getAttribute('srcset'), null, 'an illustration never advertises a capture set');
+      }
       assert.ok(existsSync(join(root, 'public', image.getAttribute('src'))));
       image.dispatchEvent(new app.window.Event('load'));
       assert.ok(!image.classList.contains('is-loading'));
     }
   }
   click(app.window, '[data-theme-toggle]');
-  assert.ok(d.querySelector('[data-preview-device="desktop"] img').src.endsWith('desktop-player-light.svg'));
-  assert.ok(d.querySelector('[data-preview-device="ios"] img').src.endsWith('ios-player-light.svg'));
-  assert.ok(d.querySelector('[data-preview-device="android"] img').src.endsWith('android-player.webp'));
+  assert.ok(d.querySelector('[data-preview-device="desktop"] img').getAttribute('src').endsWith('desktop-player-light.svg'), 'the illustrated Player keeps its theme pair');
+  assert.ok(d.querySelector('[data-preview-device="ios"] img').getAttribute('src').endsWith('ios-player-light.svg'));
+  assert.ok(d.querySelector('[data-preview-device="android"] img').getAttribute('src').endsWith('android-player.webp'));
+  assert.equal(d.querySelector('[data-preview-detail]').textContent, 'Windows/Linux/macOS · illustrative preview', 'the illustrated Player says so');
+  click(app.window, '[data-preview-view="home"]');
+  assert.equal(d.querySelector('[data-preview-device="desktop"] img').getAttribute('src'), '/assets/previews/desktop-home-linux-1440.webp', 'a capture does not switch with the theme');
+  assert.equal(d.querySelector('[data-preview-detail]').textContent, 'Linux build N20261103 · real app capture', 'the desktop caption names the capture');
   app.close();
+});
+
+const webpSize = (path) => {
+  const data = readFileSync(join(root, 'public', path));
+  assert.equal(data.subarray(0, 4).toString('ascii'), 'RIFF', `${path} is not a RIFF container`);
+  assert.equal(data.subarray(8, 12).toString('ascii'), 'WEBP', `${path} is not WebP`);
+  const chunk = data.subarray(12, 16).toString('ascii');
+  if (chunk === 'VP8 ') return { width: data.readUInt16LE(26) & 0x3fff, height: data.readUInt16LE(28) & 0x3fff };
+  if (chunk === 'VP8L') {
+    const bits = data.readUInt32LE(21);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+  }
+  if (chunk === 'VP8X') return { width: 1 + data.readUIntLE(24, 3), height: 1 + data.readUIntLE(27, 3) };
+  throw new Error(`${path}: unexpected WebP chunk ${chunk}`);
+};
+
+await check('desktop previews are the real packaged Linux captures, not illustrations', () => {
+  const dom = new JSDOM(html);
+  const d = dom.window.document;
+  const desktop = d.querySelector('[data-preview-device="desktop"] img');
+  assert.equal(desktop.getAttribute('src'), '/assets/previews/desktop-home-linux-1440.webp');
+  assert.equal(desktop.getAttribute('width'), '1440', 'the capture declares its pixel width');
+  assert.equal(desktop.getAttribute('height'), '900', 'the capture declares its pixel height');
+  assert.ok(!/^Illustrative/.test(desktop.getAttribute('alt')), 'a real capture is not described as an illustration');
+  assert.ok(/Linux/.test(desktop.getAttribute('alt')) && /N20261103/.test(desktop.getAttribute('alt')), desktop.getAttribute('alt'));
+  assert.equal(d.getElementById('preview-original').getAttribute('href'), '/assets/previews/desktop-home-linux-1440.webp');
+  for (const candidate of desktop.getAttribute('srcset').split(',')) {
+    const path = candidate.trim().split(/\s+/)[0];
+    assert.ok(existsSync(join(root, 'public', path)), `missing srcset candidate ${path}`);
+  }
+  assert.deepEqual(webpSize('/assets/previews/desktop-home-linux-1440.webp'), { width: 1440, height: 900 });
+  assert.deepEqual(webpSize('/assets/previews/desktop-library-linux-1440.webp'), { width: 1440, height: 900 });
+  assert.deepEqual(webpSize('/assets/previews/desktop-home-linux-720.webp'), { width: 720, height: 450 });
+  assert.deepEqual(webpSize('/assets/previews/desktop-library-linux-720.webp'), { width: 720, height: 450 });
+  // The retired PC illustrations must not come back, and no capture may stand in for a player or lyrics surface.
+  for (const name of readdirSync(join(root, 'public/assets/previews'))) {
+    assert.ok(!/^desktop-(home|library)-.*\.svg$/.test(name), `stale desktop illustration ${name}`);
+    assert.ok(!/^desktop-player-.*\.webp$/.test(name), `a player capture would misstate what was recorded: ${name}`);
+  }
+  assert.equal((read('public/assets/css/landing.css').match(/--preview-ratio: 1440 \/ 900/g) || []).length, 2, 'the tile and the lightbox share the capture ratio');
+  dom.window.close();
 });
 await check('device lightbox preserves aspect ratio, full-size source and focus', () => {
   const app = makeWindow();
@@ -202,6 +256,7 @@ await check('enhanced lyrics: one clock moves the sweep, rows and dots', () => {
   const sweeping = d.querySelector('.lyric-word.is-sweeping');
   assert.equal(sweeping.textContent, 'light', 'the word is rendered once, exactly as written');
   assert.equal(sweeping.querySelectorAll('.lyric-letter').length, 5, 'the word is split into letter clusters');
+  assert.ok(d.querySelector('.lyric-row.is-active').style.getPropertyValue('--dim').includes('40%, transparent'), 'idle ink is ENHANCED\'s 0.4 alpha');
   const edgeB = sweeping.querySelectorAll('.lyric-letter')[0].style.getPropertyValue('--edge-b');
   assert.ok(parseFloat(edgeB) > 0, 'the bright edge follows the clock');
   demo.seek(2600);

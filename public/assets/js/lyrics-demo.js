@@ -32,7 +32,8 @@
   const DEPTH_STAGGER_MS = 45;
   const SETTLE_MS = 1_000;
   const SETTLE_OMEGA = 14.142136;
-  const IDLE_ALPHA = 0.5;
+  // LyricsMode.ENHANCED draws idle ink at 0.4 and a passed line at LyricsPalette.PASSED_ALPHA, 0.7.
+  const IDLE_ALPHA = 0.4;
   const PASSED_ALPHA = 0.7;
   const ANCHOR = 0.35;
   const LEAD_DEFAULT_MS = 250;
@@ -212,6 +213,8 @@
   const durationMs = Math.max(...rows.map((row) => row.endMs));
   const viewport = root.querySelector('.lyrics-viewport');
   const track = root.querySelector('.lyrics-track');
+  // The card has one playhead slot, so the dots take it and the finished line steps back while they show. The app
+  // draws the same dots inside the next line's item, just under the line being sung; the timing is identical.
   const dots = root.querySelector('.lyrics-dots');
   const dotElements = dots ? [...dots.children] : [];
   const toggle = document.querySelector('[data-lyrics-toggle]');

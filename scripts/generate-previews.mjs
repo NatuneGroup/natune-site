@@ -1,5 +1,6 @@
 // Deterministic, original Natune UI illustrations. No remote assets are used.
-// Android previews are real app captures; desktop/iOS are labelled UI mocks.
+// Android previews are real app captures and so are the desktop Home and Library previews
+// (see docs/previews.md). The desktop Player and every iOS preview stay labelled UI mocks.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -130,14 +131,30 @@ function mobile(view, p) {
   return body;
 }
 
+// The desktop Home and Library tiles show real 1440x900 Linux captures, so only the Player is drawn here.
+// It is sketched in the old 2000x1091 space and fitted into that capture frame, so one aspect ratio covers
+// every desktop view and the lightbox never jumps between them.
+const DESKTOP_WIDTH = 1440;
+const DESKTOP_HEIGHT = 900;
+const DESKTOP_SKETCH_WIDTH = 2000;
+const DESKTOP_SKETCH_HEIGHT = 1091;
+
+function desktopIllustration(view, palette) {
+  const scale = DESKTOP_WIDTH / DESKTOP_SKETCH_WIDTH;
+  const offsetY = (DESKTOP_HEIGHT - DESKTOP_SKETCH_HEIGHT * scale) / 2;
+  return rect(0, 0, DESKTOP_WIDTH, DESKTOP_HEIGHT, 0, palette.bg) +
+    `<g transform="translate(0 ${offsetY.toFixed(3)}) scale(${scale})">${desktop(view, palette)}</g>`;
+}
+
 for (const [theme, palette] of Object.entries(palettes)) {
   for (const view of ['home', 'library', 'player']) {
     for (const device of ['desktop', 'ios']) {
-      const width = device === 'desktop' ? 2000 : 1320;
-      const height = device === 'desktop' ? 1091 : 2868;
-      const body = device === 'desktop' ? desktop(view, palette) : mobile(view, palette);
+      if (device === 'desktop' && view !== 'player') continue;
+      const width = device === 'desktop' ? DESKTOP_WIDTH : 1320;
+      const height = device === 'desktop' ? DESKTOP_HEIGHT : 2868;
+      const body = device === 'desktop' ? desktopIllustration(view, palette) : mobile(view, palette);
       writeFileSync(join(output, `${device}-${view}-${theme}.svg`), svg(width, height, `Natune ${view} on ${device} (${theme})`, body));
     }
   }
 }
-console.log('previews: generated 12 self-contained Natune desktop/iOS illustrations');
+console.log('previews: generated 8 self-contained Natune desktop/iOS illustrations');
