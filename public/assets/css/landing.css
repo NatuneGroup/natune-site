@@ -165,7 +165,7 @@ img { display: block; max-width: 100%; height: auto; }
 .hero__stats div { min-width: 0; }
 .hero__stats dt { margin-bottom: 3px; font: var(--label-small); font-variation-settings: 'ROND' 100; letter-spacing: .08em; }
 .hero__stats dd { min-height: 20px; font: var(--title-medium); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-#hero-version { font-size: .82rem; }
+#hero-version { font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .showcase { background: var(--surface); padding: 44px 0 92px; }
 .showcase__heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 28px; }

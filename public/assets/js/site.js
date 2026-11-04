@@ -47,11 +47,15 @@
     });
   }
 
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((en) => en.isIntersecting && en.target.classList.add('is-visible')),
-    { threshold: 0.12 }
-  );
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((en) => en.isIntersecting && en.target.classList.add('is-visible')),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+  }
 
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
@@ -303,6 +307,7 @@
   const background = [...document.body.children].filter((el) => el !== modal && !['SCRIPT', 'SVG'].includes(el.tagName));
   const inertState = new Map();
   const openDl = (opener) => {
+    if (!modal.hidden) return;
     lastFocused = opener || document.activeElement;
     background.forEach((el) => {
       inertState.set(el, el.inert);
@@ -313,6 +318,8 @@
     selectPlatform(opener?.dataset.dlPlatform || current, { focus: true });
   };
   const closeDl = () => {
+    if (modal.hidden) return;
+    renderRequest++;
     modal.hidden = true;
     document.body.classList.remove('dl-open');
     inertState.forEach((value, el) => { el.inert = value; });
