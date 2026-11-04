@@ -353,6 +353,13 @@ await check('enhanced lyrics: a resize re-anchors the row that is already curren
   metrics.tops = [0, 39, 79, 157];
   app.window.dispatchEvent(new app.window.Event('resize'));
   assert.equal(anchor(), '-99px', 'the paused card re-anchors back');
+  const settles = () => rowElements.map((row) => row.style.getPropertyValue('--settle-y'));
+  app.demo.play();
+  app.demo.seek(0);
+  app.demo.tick(2600);
+  assert.ok(settles().some((value) => parseFloat(value) !== 0), 'a line change reached by playing still glides');
+  app.window.dispatchEvent(new app.window.Event('resize'));
+  assert.deepEqual(settles(), ['0.00px', '0.00px', '0.00px', '0.00px'], 'a layout change clears the settle it interrupted');
   app.close();
 });
 await check('enhanced lyrics: a seek snaps, so repeated seeks paint the same frame', () => {
