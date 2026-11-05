@@ -134,6 +134,38 @@ await check('Home, Library and Player switch every device to a valid local previ
   app.close();
 });
 
+await check('returning to Home restores the Android capture, source set and alt', () => {
+  const app = makeWindow();
+  const d = app.window.document;
+  const android = d.querySelector('[data-preview-device="android"] img');
+  const expected = {
+    src: '/assets/previews/android-home.webp',
+    srcset: '/assets/previews/android-home-540.webp 540w, /assets/previews/android-home.webp 1080w',
+    sizes: '(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw',
+    alt: 'Natune Home on Android',
+  };
+  const homeState = () => ({
+    src: android.getAttribute('src'),
+    srcset: android.getAttribute('srcset'),
+    sizes: android.getAttribute('sizes'),
+    alt: android.alt,
+  });
+  for (const leaving of ['library', 'player']) {
+    click(app.window, `[data-preview-view="${leaving}"]`);
+    assert.equal(android.getAttribute('src'), `/assets/previews/android-${leaving}.webp`, `the ${leaving} view is shown first`);
+    click(app.window, '[data-preview-view="home"]');
+    assert.deepEqual(homeState(), expected, `${leaving} -> Home restores the Home capture, source set and alt`);
+    click(app.window, '[data-preview-device="android"]');
+    const dialog = d.getElementById('preview-dialog');
+    assert.ok(dialog.open, 'the enlarged Android preview opens');
+    assert.equal(d.getElementById('preview-image').getAttribute('src'), expected.src, `${leaving} -> Home dialog shows the Home capture`);
+    assert.equal(d.getElementById('preview-original').getAttribute('href'), expected.src, `${leaving} -> Home full-size link is the Home capture`);
+    dialog.close();
+  }
+  assert.equal(d.querySelector('[data-preview-view="home"]').getAttribute('aria-pressed'), 'true');
+  app.close();
+});
+
 const webpSize = (path) => {
   const data = readFileSync(join(root, 'public', path));
   assert.equal(data.subarray(0, 4).toString('ascii'), 'RIFF', `${path} is not a RIFF container`);

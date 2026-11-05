@@ -292,6 +292,11 @@ console.log('== 404, robots, sitemap, social metadata, cache policy and dead wei
   ok(html.includes('{{year}}'), 'the source keeps the build-time year placeholder');
   ok(/<noscript>/.test(newsHtml) && /JavaScript/.test(newsHtml), 'the news page tells no-script visitors what is happening');
   ok(/<noscript>/.test(adminHtml) && /JavaScript/.test(adminHtml), 'the admin page tells no-script visitors what is happening');
+
+  const landingCss = read('public/assets/css/landing.css');
+  ok(/\.md-table\s*\{[^}]*max-width:\s*100%[^}]*overflow-x:\s*auto/.test(landingCss), 'markdown tables get a constrained horizontal scroll container');
+  ok(/\.md-table:focus-visible/.test(landingCss), 'the table scroll container has a keyboard focus affordance');
+  ok(/body\s*\{[^}]*overflow-x:\s*hidden/.test(landingCss), 'the landing overflow policy is unchanged');
   ok(!/class="[^"]*reveal/.test(notFoundHtml), 'the 404 page has no dead reveal markup');
 
   // The vendored Material Symbols file is a subset: a name it does not draw
