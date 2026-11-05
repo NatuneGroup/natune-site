@@ -396,6 +396,8 @@ body.dl-open, body.preview-open { overflow: hidden; }
 .md-body hr { margin: 1.6em 0; border: 0; border-top: 1px solid var(--outline-variant); }
 .md-body img { max-width: 100%; margin: 18px 0; border-radius: 20px; }
 .md-body table { margin: 1em 0; border-collapse: collapse; color: var(--on-surface-variant); }
+.md-table { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.md-table:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; border-radius: 10px; }
 .md-body th, .md-body td { padding: 6px 12px; border: 1px solid var(--outline-variant); text-align: start; }
 .md-body th { background: var(--surface-high); }
 

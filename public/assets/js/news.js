@@ -59,12 +59,29 @@
       FORBID_TAGS: ['style', 'form', 'input', 'textarea', 'select', 'option', 'button', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
       FORBID_ATTR: ['style'],
     });
+  // Sanitized markdown can contain a table wider than the article column. The
+  // wrapper is added after sanitization (trusted markup), is scrollable and
+  // takes focus so keyboard users can reach every column.
+  const scrollableTables = (html) => {
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    template.content.querySelectorAll('table').forEach((table) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'md-table';
+      wrapper.tabIndex = 0;
+      wrapper.setAttribute('role', 'region');
+      wrapper.setAttribute('aria-label', 'Table, scroll sideways to see every column');
+      table.replaceWith(wrapper);
+      wrapper.appendChild(table);
+    });
+    return template.innerHTML;
+  };
   const md = (src) => {
     if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') {
       // Vendor scripts blocked/missing: text-only fallback, never unsanitized HTML.
       return '<p>' + esc(String(src)).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
     }
-    return sanitize(marked.parse(String(src)));
+    return scrollableTables(sanitize(marked.parse(String(src))));
   };
 
   const dateLocale = document.documentElement.lang || 'en-GB';
