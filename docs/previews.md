@@ -50,6 +50,26 @@ for name in ("home-light-clean-1440x900", "library-empty-light-1440x900"):
 PY
 ```
 
+## Android half-scale candidates
+
+The Home, Library and Player Android captures are 1080x2400 and are drawn at roughly 120–260 CSS px, so each has a
+540x1200 half-scale copy (`android-{home,library,player}-540.webp`). The tile offers both through `srcset`, with
+`sizes="(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw"`, so a phone downloads
+the 540w file (26–61 KB) instead of the 1080w one (26–182 KB). Both candidates keep the 1080:2400 source ratio; the
+device frame crops with `object-fit: cover`.
+
+Regenerate a 540 candidate by drawing the 1080 file at 540x1200 and encoding WebP with Chromium (the repository
+vendors no image tool):
+
+```sh
+chromium --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+  --window-size=540,1200 --virtual-time-budget=3000 \
+  --screenshot=android-home-540.webp android-540.html
+```
+
+where `android-540.html` is a 540x1200 page with `img { width: 540px; height: 1200px; display: block }` and the
+1080 source as its `src`.
+
 ## Why the desktop Player is still an illustration
 
 Playback could not be captured on the packaged build: YouTube refused the stream request (AntiBot) in the QA

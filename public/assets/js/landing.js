@@ -12,14 +12,21 @@
   // their own alt text and source set and never follow the light/dark theme. Playback could not be captured, so the
   // desktop Player stays a labelled illustration and keeps its theme pair, as does every iOS view.
   const CAPTURE_SIZES = '(min-width: 1180px) 620px, (min-width: 720px) 56vw, 92vw';
+  const ANDROID_SIZES = '(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw';
+  // Home's capture copy lives in the markup so it is readable without scripts;
+  // the library variant is JS-only. Reading home back from the DOM keeps a
+  // single source for every string the two views share.
+  const desktopHome = document.querySelector('[data-preview-device="desktop"] img');
   const desktopCaptures = {
-    home: {
-      src: '/assets/previews/desktop-home-linux-1440.webp',
-      srcset: '/assets/previews/desktop-home-linux-720.webp 720w, /assets/previews/desktop-home-linux-1440.webp 1440w',
-      sizes: CAPTURE_SIZES,
-      alt: 'Natune Home on Linux, running the N20261103 desktop build: Quick picks and Trending community playlists from the anonymous YouTube Music feed, beside the Home, Search and Library rail',
-      detail: 'Linux build N20261103 · real app capture',
-    },
+    ...(desktopHome ? {
+      home: {
+        src: desktopHome.getAttribute('src'),
+        srcset: desktopHome.getAttribute('srcset'),
+        sizes: desktopHome.getAttribute('sizes'),
+        alt: desktopHome.alt,
+        detail: desktopDetail?.textContent.trim() || '',
+      },
+    } : {}),
     library: {
       src: '/assets/previews/desktop-library-linux-1440.webp',
       srcset: '/assets/previews/desktop-library-linux-720.webp 720w, /assets/previews/desktop-library-linux-1440.webp 1440w',
@@ -29,6 +36,18 @@
     },
   };
   const ILLUSTRATED_DETAIL = 'Windows/Linux/macOS · illustrative preview';
+  const androidHome = document.querySelector('[data-preview-device="android"] img');
+  const androidCapture = (view) => (view === 'home' && androidHome ? {
+    src: androidHome.getAttribute('src'),
+    srcset: androidHome.getAttribute('srcset'),
+    sizes: androidHome.getAttribute('sizes'),
+    alt: androidHome.alt,
+  } : {
+    src: `/assets/previews/android-${view}.webp`,
+    srcset: `/assets/previews/android-${view}-540.webp 540w, /assets/previews/android-${view}.webp 1080w`,
+    sizes: ANDROID_SIZES,
+    alt: `Natune ${labels[view]} on Android`,
+  });
   let current = 'home';
   let lastFocused = null;
   let openDevice = null;
@@ -42,9 +61,7 @@
         detail: ILLUSTRATED_DETAIL,
       };
     }
-    if (device === 'android') {
-      return { src: `/assets/previews/android-${current}.webp`, alt: `Natune ${labels[current]} on Android` };
-    }
+    if (device === 'android') return androidCapture(current);
     return { src: illustration(device), alt: `Illustrative Natune ${labels[current]} on ${deviceLabels[device]}` };
   };
   const applyCapture = (image, source) => {

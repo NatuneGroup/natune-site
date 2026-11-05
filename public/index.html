@@ -10,7 +10,15 @@
 <meta property="og:title" content="Natune · Every source. One player.">
 <meta property="og:description" content="Your music, across every screen. An open-source Kotlin Multiplatform player with multiple providers, synced lyrics and 18 player styles.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://natune.pages.dev/assets/img/logo.png">
+<meta property="og:url" content="https://natune.pages.dev/">
+<meta property="og:site_name" content="Natune">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://natune.pages.dev/assets/img/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Natune — every source, one player">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://natune.pages.dev/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -27,6 +35,7 @@
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="m18.3 5.7-1.4-1.4L12 9.2 7.1 4.3 5.7 5.7l4.9 4.9-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M11 3h2v9.2l3.6-3.6L18 10l-6 6-6-6 1.4-1.4 3.6 3.6V3zM5 17v3h14v-3h2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3z"/></symbol>
+  <symbol id="i-news" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 12H7v-2h3v2zm0-4H7V9h3v2zm7 4h-5v-6h5v6z"/></symbol>
   <symbol id="i-light" viewBox="0 0 24 24"><path d="M11 1h2v3h-2zm0 19h2v3h-2zM1 11h3v2H1zm19 0h3v2h-3zM3.5 4.9l1.4-1.4L7 5.6 5.6 7zm13.5 13.5 1.4-1.4 2.1 2.1-1.4 1.4zm0-12.8 2.1-2.1 1.4 1.4L18.4 7zM3.5 19.1 5.6 17 7 18.4l-2.1 2.1zM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></symbol>
   <symbol id="i-dark" viewBox="0 0 24 24"><path d="M20.2 15.5A8.6 8.6 0 0 1 8.5 3.8a9 9 0 1 0 11.7 11.7z"/></symbol>
 </svg>
@@ -34,7 +43,7 @@
 <header class="navbar" id="navbar">
   <div class="container navbar__inner">
     <a class="navbar__brand" href="/" aria-label="Natune home">
-      <img class="navbar__brand-mark" src="/assets/img/logo.png" alt="" width="58" height="58">
+      <img class="navbar__brand-mark" src="/assets/img/logo-128.png" alt="" width="58" height="58">
       <span>Natune</span>
     </a>
     <nav class="navbar__links" aria-label="Main navigation">
@@ -53,7 +62,7 @@
       <a href="/#showcase"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Showcase</a>
       <a href="/#features"><span class="material-symbols-rounded" aria-hidden="true">tune</span>Features</a>
       <a href="/#platforms"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Platforms</a>
-      <a href="/news/"><span class="material-symbols-rounded" aria-hidden="true">article</span>News</a>
+      <a href="/news/"><svg class="icon" aria-hidden="true"><use href="#i-news"/></svg>News</a>
       <a href="/#faq"><span class="material-symbols-rounded" aria-hidden="true">help</span>FAQ</a>
       <a class="navbar__drawer-download" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open aria-haspopup="dialog"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download</a>
     </div>
@@ -105,7 +114,7 @@
         <figure class="preview-tile preview-tile--android">
           <figcaption><span class="preview-tile__label"><img class="platform-icon" src="/assets/icons/android.svg" alt="" width="22" height="22"><strong>Android</strong></span><span class="preview-tile__detail">Android 7 and newer</span></figcaption>
           <button class="preview-tile__screen" type="button" data-preview-device="android" aria-label="Enlarge Android app preview" aria-haspopup="dialog">
-            <div class="screen screen--android"><div class="device-frame"><img class="screen__capture" src="/assets/previews/android-home.webp" alt="Natune Home on Android" width="1080" height="2400" loading="lazy" decoding="async"></div></div>
+            <div class="screen screen--android"><div class="device-frame"><img class="screen__capture" src="/assets/previews/android-home.webp" srcset="/assets/previews/android-home-540.webp 540w, /assets/previews/android-home.webp 1080w" sizes="(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw" alt="Natune Home on Android" width="1080" height="2400" loading="lazy" decoding="async"></div></div>
           </button>
         </figure>
         <figure class="preview-tile preview-tile--ios">
@@ -210,7 +219,7 @@
 
 <footer class="footer">
   <div class="container">
-    <div class="footer__top"><a class="footer__brand" href="/" aria-label="Natune home"><img src="/assets/img/logo.png" alt="" width="50" height="50" loading="lazy"><strong>Natune</strong></a><p>Every source. One player.</p></div>
+    <div class="footer__top"><a class="footer__brand" href="/" aria-label="Natune home"><img src="/assets/img/logo-128.png" alt="" width="50" height="50" loading="lazy"><strong>Natune</strong></a><p>Every source. One player.</p></div>
     <nav class="footer__links" aria-label="Footer navigation">
       <a href="https://github.com/NatuneGroup/Natune" target="_blank" rel="noopener noreferrer">Source<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
       <a href="https://github.com/NatuneGroup/Natune/releases" target="_blank" rel="noopener noreferrer">Releases<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
@@ -220,7 +229,7 @@
       <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
       <a href="https://github.com/NatuneGroup/Natune/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
     </nav>
-    <div class="footer__bottom"><p>Natune plays content from your configured providers. It does not host, upload or distribute music, bypass DRM, or replace required accounts and subscriptions. Respect each provider’s terms and the rights of creators.</p><p>Natune is independent of Google, YouTube, Tidal, Qobuz, Deezer, Telegram, Apple and Microsoft. All trademarks belong to their owners.</p><p>Made by NatuneGroup and contributors.<br>© <span id="year">2026</span> · GPL-3.0</p></div>
+    <div class="footer__bottom"><p>Natune plays content from your configured providers. It does not host, upload or distribute music, bypass DRM, or replace required accounts and subscriptions. Respect each provider’s terms and the rights of creators.</p><p>Natune is independent of Google, YouTube, Tidal, Qobuz, Deezer, Telegram, Apple and Microsoft. All trademarks belong to their owners.</p><p>Made by NatuneGroup and contributors.<br>© <span id="year">{{year}}</span> · GPL-3.0</p></div>
   </div>
 </footer>
 
