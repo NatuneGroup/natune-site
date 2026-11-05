@@ -1,9 +1,9 @@
 # Vendored third-party libraries
 
-Pinned, self-hosted copies loaded by `/news/` (and the admin preview, if one is
-added). Do NOT edit these files — update them by replacing with a new upstream
-release and bumping the version below. Keeping them on `/assets/vendor/` lets
-the site run under `script-src 'self'` with no CDN or SRI exceptions.
+Pinned, self-hosted copies loaded by `/news/`. Do NOT edit these files — update
+them by replacing with a new upstream release and bumping the version below.
+Keeping them on `/assets/vendor/` lets the site run under `script-src 'self'`
+with no CDN or SRI exceptions.
 
 | File | Package | Version | License | Upstream |
 | ---- | ------- | ------- | ------- | -------- |
