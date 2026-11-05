@@ -53,7 +53,12 @@
       .catch((e) => msg($('editor-msg'), 'Load failed: ' + e.message));
   }
 
-  const fmtDate = (d) => new Date(Number(d) * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const dateLocale = document.documentElement.lang || 'en-GB';
+  const fmtDate = (d) => {
+    const sec = Number(d);
+    if (!Number.isFinite(sec) || sec <= 0) return 'Unknown date';
+    return new Date(sec * 1000).toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
+  };
 
   function renderList() {
     const el = $('items');
@@ -63,7 +68,7 @@
         <b>${esc(it.Title)} ${it.Important ? '<span class="badge-important">Important</span>' : ''}</b>
         <span class="meta">${esc(it.id)} · ${fmtDate(it.Date)}</span>
         <button class="btn btn-tonal btn-sm" data-edit="${esc(it.id)}" type="button">Edit</button>
-        <button class="btn btn-outline btn-sm" data-del="${esc(it.id)}" type="button">Delete</button>
+        <button class="btn btn-outlined btn-sm" data-del="${esc(it.id)}" type="button">Delete</button>
       </div>`).join('');
     el.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', () => startEdit(b.dataset.edit)));
     el.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', () => del(b.dataset.del)));
