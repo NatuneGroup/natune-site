@@ -13,19 +13,19 @@
   // desktop Player stays a labelled illustration and keeps its theme pair, as does every iOS view.
   const CAPTURE_SIZES = '(min-width: 1180px) 620px, (min-width: 720px) 56vw, 92vw';
   const ANDROID_SIZES = '(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw';
-  // Home's capture copy lives in the markup so it is readable without scripts;
-  // the library variant is JS-only. Reading home back from the DOM keeps a
-  // single source for every string the two views share.
-  const desktopHome = document.querySelector('[data-preview-device="desktop"] img');
+  // Home's capture copy lives in the markup so it is readable without scripts.
+  // Snapshot it before applyCapture() rewrites the live image, so selecting Home
+  // again restores the original capture instead of the view it is leaving.
+  const snapshot = (image) => (image ? Object.freeze({
+    src: image.getAttribute('src'),
+    srcset: image.getAttribute('srcset'),
+    sizes: image.getAttribute('sizes'),
+    alt: image.alt,
+  }) : null);
+  const desktopHome = snapshot(document.querySelector('[data-preview-device="desktop"] img'));
   const desktopCaptures = {
     ...(desktopHome ? {
-      home: {
-        src: desktopHome.getAttribute('src'),
-        srcset: desktopHome.getAttribute('srcset'),
-        sizes: desktopHome.getAttribute('sizes'),
-        alt: desktopHome.alt,
-        detail: desktopDetail?.textContent.trim() || '',
-      },
+      home: Object.freeze({ ...desktopHome, detail: desktopDetail?.textContent.trim() || '' }),
     } : {}),
     library: {
       src: '/assets/previews/desktop-library-linux-1440.webp',
@@ -36,13 +36,8 @@
     },
   };
   const ILLUSTRATED_DETAIL = 'Windows/Linux/macOS · illustrative preview';
-  const androidHome = document.querySelector('[data-preview-device="android"] img');
-  const androidCapture = (view) => (view === 'home' && androidHome ? {
-    src: androidHome.getAttribute('src'),
-    srcset: androidHome.getAttribute('srcset'),
-    sizes: androidHome.getAttribute('sizes'),
-    alt: androidHome.alt,
-  } : {
+  const androidHome = snapshot(document.querySelector('[data-preview-device="android"] img'));
+  const androidCapture = (view) => (view === 'home' && androidHome ? androidHome : {
     src: `/assets/previews/android-${view}.webp`,
     srcset: `/assets/previews/android-${view}-540.webp 540w, /assets/previews/android-${view}.webp 1080w`,
     sizes: ANDROID_SIZES,
