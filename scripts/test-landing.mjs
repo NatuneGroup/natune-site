@@ -1,6 +1,6 @@
 // Landing redesign regressions; deterministic jsdom checks with no network.
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
@@ -109,6 +109,11 @@ await check('Home, Library and Player switch every device to a valid local previ
         assert.ok(image.getAttribute('srcset').includes(`desktop-${view}-linux-720.webp 720w`), 'the capture offers a small candidate');
         assert.ok(image.getAttribute('sizes'), 'the capture declares its rendered size');
         assert.ok(image.alt.startsWith(`Natune ${view === 'home' ? 'Home' : 'Library'} on Linux`), image.alt);
+      } else if (device === 'android') {
+        assert.equal(image.getAttribute('src'), `/assets/previews/android-${view}.webp`);
+        assert.ok(image.getAttribute('srcset').includes(`android-${view}-540.webp 540w`), 'the phone capture offers a half-scale candidate');
+        assert.ok(image.getAttribute('srcset').includes(`android-${view}.webp 1080w`), 'the full-size candidate stays');
+        assert.ok(image.getAttribute('sizes'), 'the phone capture declares its rendered size');
       } else {
         assert.ok(image.getAttribute('src').includes(`-${view}`), image.getAttribute('src'));
         assert.equal(image.getAttribute('srcset'), null, 'an illustration never advertises a capture set');
@@ -168,6 +173,12 @@ await check('desktop previews are the real packaged Linux captures, not illustra
   }
   assert.equal((read('public/assets/css/landing.css').match(/--preview-ratio: 1440 \/ 900/g) || []).length, 2, 'the tile and the lightbox share the capture ratio');
   assert.ok(read('docs/previews.md').includes('width * im.height // im.width'), 'the documented WebP recipe keeps the source ratio');
+  for (const view of ['home', 'library', 'player']) {
+    assert.deepEqual(webpSize(`/assets/previews/android-${view}-540.webp`), { width: 540, height: 1200 }, `${view} half-scale size`);
+    const half = statSync(join(root, `public/assets/previews/android-${view}-540.webp`)).size;
+    const full = statSync(join(root, `public/assets/previews/android-${view}.webp`)).size;
+    assert.ok(half < full, `${view} half-scale candidate is smaller (${half} < ${full})`);
+  }
   dom.window.close();
 });
 await check('the lyrics card says in visible copy that it is an authored demo', () => {
