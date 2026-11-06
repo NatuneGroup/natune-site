@@ -3,391 +3,262 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
 <title>Natune · Every source. One player.</title>
-<meta name="description" content="Natune is an open-source music player for Android, iOS, Windows, macOS and Linux that plays lossless audio from Tidal, Qobuz, Deezer, YouTube, Telegram and more — with word-by-word lyrics, smart transitions and a beautiful Material 3 interface.">
-<meta name="theme-color" content="#0d110d">
+<meta name="description" content="Natune is a free, open-source Kotlin Multiplatform music app for Android, iOS, Linux, macOS and Windows. YouTube Music and more providers, word-synced lyrics, Listen Together, offline downloads and Material 3 Expressive.">
+<meta name="theme-color" content="#0d140e">
 <meta property="og:title" content="Natune · Every source. One player.">
-<meta property="og:description" content="Open-source music player for Android, iOS, Windows, macOS and Linux — multi-source lossless playback, karaoke lyrics, smart transitions.">
+<meta property="og:description" content="Your music, across every screen. An open-source Kotlin Multiplatform player with multiple providers, synced lyrics and 18 player styles.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://natune.pages.dev/assets/img/logo.png">
+<meta property="og:url" content="https://natune.pages.dev/">
+<meta property="og:site_name" content="Natune">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://natune.pages.dev/assets/img/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Natune — every source, one player">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://natune.pages.dev/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/assets/fonts/googlesansflex-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/site.css">
-<noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
+<link rel="preload" href="/assets/fonts/googlesansflex-rounded.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/material-symbols-rounded.woff2" as="font" type="font/woff2" crossorigin>
+<script src="/assets/js/theme.js"></script>
+<link rel="stylesheet" href="/assets/css/landing.css">
 </head>
-<body>
+<body class="landing">
 <a class="skip-link" href="#main">Skip to main content</a>
-
-<svg class="svg-defs" aria-hidden="true">
-  <symbol id="i-download" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm14-9h-4V3H9v8H5l7 8 7-8z"/></symbol>
-  <symbol id="i-code" viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></symbol>
-  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></symbol>
-  <symbol id="i-add" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></symbol>
-  <symbol id="i-note" viewBox="0 0 24 24"><path d="M12 3v9.28a4.39 4.39 0 0 0-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21 15 18.99 15 16.5V6h4V3h-7z"/></symbol>
-  <symbol id="i-lyrics" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 9h7v2H7V9zm0 4h5v2H7v-2zm0-8h10v2H7V5z"/></symbol>
-  <symbol id="i-groups" viewBox="0 0 24 24"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
-  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></symbol>
-  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm-2 20h-4v-1h4v1zm3-4H7V4h10v13z"/></symbol>
-  <symbol id="i-tv" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></symbol>
-  <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4C2.9 4 2 4.9 2 6v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></symbol>
-  <symbol id="i-apple" viewBox="0 0 24 24"><path d="M17.05 12.54c-.03-2.89 2.36-4.28 2.47-4.35-1.35-1.97-3.44-2.24-4.18-2.27-1.78-.18-3.47 1.05-4.37 1.05-.9 0-2.29-1.02-3.77-1-1.94.03-3.72 1.13-4.72 2.86-2.01 3.49-.51 8.66 1.45 11.5.96 1.39 2.1 2.95 3.6 2.89 1.45-.06 2-.93 3.75-.93s2.25.93 3.78.9c1.56-.02 2.55-1.41 3.5-2.8 1.1-1.61 1.56-3.17 1.58-3.25-.03-.02-3.04-1.17-3.09-4.6zM14.16 4.06c.8-.97 1.34-2.32 1.19-3.66-1.15.05-2.55.77-3.38 1.73-.74.86-1.39 2.23-1.22 3.55 1.29.1 2.6-.65 3.41-1.62z"/></symbol>
-  <symbol id="i-windows" viewBox="0 0 24 24"><path d="M3 5.5 11 4.4v7.1H3V5.5zM3 12.5h8v7.1l-8-1.1v-6zM12 4.2 21 3v8.5h-9V4.2zM12 12.5h9V21l-9-1.2v-7.3z"/></symbol>
-  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2.5 4L5 9.5 7.5 12 5 14.5 6.5 16l4-4-4-4zM11 15h7v-2h-7v2z"/></symbol>
-  <symbol id="i-eq" viewBox="0 0 24 24"><path d="M7 18h2V6H7v12zm4 4h2V2h-2v20zM3 14h2v-4H3v4zm12 4h2V6h-2v12zm4-8v4h2v-4h-2z"/></symbol>
-  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M6.99 11 3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></symbol>
-  <symbol id="i-offline" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 13-4-4 1.41-1.41L11 12.17V7h2v5.17l2.59-2.58L17 11l-4 4zm-7 5h16v2H4v-2z"/></symbol>
-  <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.8 13.8 0 0 0-.64 1.28 18.3 18.3 0 0 0-5.5 0 12.6 12.6 0 0 0-.64-1.28c-1.71.29-3.37.8-4.93 1.51A20.3 20.3 0 0 0 .1 18.06a19.9 19.9 0 0 0 6.07 3.03c.49-.66.93-1.37 1.3-2.1a12.9 12.9 0 0 1-2.05-.98c.17-.12.34-.25.5-.38a14.2 14.2 0 0 0 12.16 0c.16.13.33.26.5.38-.65.39-1.34.72-2.05.98.37.73.81 1.44 1.3 2.1a19.8 19.8 0 0 0 6.07-3.03 20.2 20.2 0 0 0-3.58-13.69zM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42s.95-2.42 2.16-2.42 2.18 1.09 2.16 2.42c0 1.34-.95 2.42-2.16 2.42zm7.97 0c-1.18 0-2.16-1.08-2.16-2.42s.95-2.42 2.16-2.42 2.18 1.09 2.16 2.42c0 1.34-.95 2.42-2.16 2.42z"/></symbol>
-  <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.94 4.4 19.03 19.1c-.22 1-.8 1.24-1.62.77l-4.5-3.3-2.16 2.08c-.24.24-.44.44-.9.44l.32-4.56 8.3-7.5c.36-.32-.08-.5-.56-.18L7.66 13.5l-4.4-1.37c-.95-.3-.97-.95.2-1.4L20.6 3.16c.8-.3 1.5.18 1.34 1.24z"/></symbol>
-  <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.11 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.38.82 1.11.82 2.24v3.32c0 .32.22.7.83.58A12 12 0 0 0 12 .3z"/></symbol>
-  <symbol id="i-outward" viewBox="0 0 24 24"><path d="M6 6v2h8.59L5 17.59 6.41 19 16 9.41V18h2V6z"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 15-4-4 1.41-1.41L10 13.17l6.59-6.59L18 8l-8 8z"/></symbol>
-  <symbol id="i-bug" viewBox="0 0 24 24"><path d="M20 8h-2.81a5.98 5.98 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6.06 6.06 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63A5.98 5.98 0 0 0 6.8 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z"/></symbol>
-  <symbol id="i-update" viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.95 8.95 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></symbol>
-  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6a3.1 3.1 0 0 1 6.2 0v2z"/></symbol>
-  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
-  <symbol id="i-globe" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm7 6h-3a15.6 15.6 0 0 0-1.38-3.56A8.03 8.03 0 0 1 19 8zM12 4a14 14 0 0 1 1.95 4h-3.9A14 14 0 0 1 12 4zM4.26 14a8.1 8.1 0 0 1 0-4h3.38a16.5 16.5 0 0 0 0 4H4.26zm.74 2h3a15.6 15.6 0 0 0 1.38 3.56A8.03 8.03 0 0 1 5 16zm3-8H5a8.03 8.03 0 0 1 4.38-3.56A15.6 15.6 0 0 0 8 8zm4 12a14 14 0 0 1-1.95-4h3.9A14 14 0 0 1 12 20zm2.34-6H9.66a14.7 14.7 0 0 1 0-4h4.68a14.7 14.7 0 0 1 0 4zm.28 5.56A15.6 15.6 0 0 0 16 16h3a8.03 8.03 0 0 1-4.38 3.56zM16.36 14a16.5 16.5 0 0 0 0-4h3.38a8.1 8.1 0 0 1 0 4h-3.38z"/></symbol>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m18.3 5.7-1.4-1.4L12 9.2 7.1 4.3 5.7 5.7l4.9 4.9-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M11 3h2v9.2l3.6-3.6L18 10l-6 6-6-6 1.4-1.4 3.6 3.6V3zM5 17v3h14v-3h2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3z"/></symbol>
   <symbol id="i-news" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 12H7v-2h3v2zm0-4H7V9h3v2zm7 4h-5v-6h5v6z"/></symbol>
-  <symbol id="i-help" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2v2zm2.07-7.75-.9.92A3.5 3.5 0 0 0 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A2 2 0 1 0 10 9H8a4 4 0 1 1 8 0c0 .88-.36 1.68-.93 2.25z"/></symbol>
-  <symbol id="i-eco" viewBox="0 0 24 24"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></symbol>
-  <symbol id="i-hub" viewBox="0 0 24 24"><path d="M12 2a2.5 2.5 0 0 1 2.45 3.03l3.1 3.1a2.5 2.5 0 1 1-1.42 1.42l-3.1-3.1a2.5 2.5 0 0 1-2.06 0l-3.1 3.1a2.5 2.5 0 1 1-1.42-1.42l3.1-3.1A2.5 2.5 0 0 1 12 2zm0 12.5a2.5 2.5 0 0 1 2.45 2.03l1.85-.8a2.5 2.5 0 1 1 .8 1.54l-1.93.84A2.5 2.5 0 0 1 12 22a2.5 2.5 0 0 1-3.17-3.89l-1.93-.84a2.5 2.5 0 1 1 .8-1.54l1.85.8A2.5 2.5 0 0 1 12 14.5z"/></symbol>
-  <symbol id="i-cast" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2a9 9 0 0 1 9 9h2c0-6.08-4.93-11-11-11z"/></symbol>
-  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
-  <symbol id="i-backup" viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4 7.48 7.48 0 0 0 4.73 6.4 6 6 0 0 0 6 18h13a4.5 4.5 0 0 0 .35-7.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></symbol>
-  <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></symbol>
-  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
-  <symbol id="i-delete" viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></symbol>
-  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol>
-  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></symbol>
+  <symbol id="i-light" viewBox="0 0 24 24"><path d="M11 1h2v3h-2zm0 19h2v3h-2zM1 11h3v2H1zm19 0h3v2h-3zM3.5 4.9l1.4-1.4L7 5.6 5.6 7zm13.5 13.5 1.4-1.4 2.1 2.1-1.4 1.4zm0-12.8 2.1-2.1 1.4 1.4L18.4 7zM3.5 19.1 5.6 17 7 18.4l-2.1 2.1zM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></symbol>
+  <symbol id="i-dark" viewBox="0 0 24 24"><path d="M20.2 15.5A8.6 8.6 0 0 1 8.5 3.8a9 9 0 1 0 11.7 11.7z"/></symbol>
 </svg>
 
 <header class="navbar" id="navbar">
-  <a class="navbar__brand" href="/">
-    <img src="/assets/img/logo.png" alt="Natune logo" width="34" height="34">
-    Natune
-  </a>
-  <nav class="navbar__links" aria-label="Main navigation">
-    <a href="/#showcase">Showcase</a>
-    <a href="/#features">Features</a>
-    <a href="/#platforms">Platforms</a>
-    <a href="/news/">News</a>
-    <a href="/#faq">FAQ</a>
+  <div class="container navbar__inner">
+    <a class="navbar__brand" href="/" aria-label="Natune home">
+      <img class="navbar__brand-mark" src="/assets/img/logo-128.png" alt="" width="58" height="58">
+      <span>Natune</span>
+    </a>
+    <nav class="navbar__links" aria-label="Main navigation">
+      <a href="/#showcase">Showcase</a>
+      <a href="/#features">Features</a>
+      <a href="/#platforms">Platforms</a>
+      <a href="/news/">News</a>
+      <a href="/#faq">FAQ</a>
+      <a class="btn btn-filled btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open aria-haspopup="dialog"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download</a>
+    </nav>
+    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme"><svg class="icon" aria-hidden="true"><use href="#i-light"/></svg></button>
+    <button class="icon-button navbar__menu" id="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></button>
+  </div>
+  <nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
+    <div class="container">
+      <a href="/#showcase"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Showcase</a>
+      <a href="/#features"><span class="material-symbols-rounded" aria-hidden="true">tune</span>Features</a>
+      <a href="/#platforms"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Platforms</a>
+      <a href="/news/"><svg class="icon" aria-hidden="true"><use href="#i-news"/></svg>News</a>
+      <a href="/#faq"><span class="material-symbols-rounded" aria-hidden="true">help</span>FAQ</a>
+      <a class="navbar__drawer-download" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open aria-haspopup="dialog"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download</a>
+    </div>
   </nav>
-  <a class="btn btn-primary btn-sm navbar__cta" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-  <button class="navbar__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
-    <svg class="icon icon-lg"><use href="#i-menu"/></svg>
-  </button>
 </header>
-<nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
-  <a href="/#showcase"><svg class="icon"><use href="#i-phone"/></svg>Showcase</a>
-  <a href="/#features"><svg class="icon"><use href="#i-tune"/></svg>Features</a>
-  <a href="/#platforms"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</a>
-  <a href="/news/"><svg class="icon"><use href="#i-news"/></svg>News</a>
-  <a href="/#faq"><svg class="icon"><use href="#i-help"/></svg>FAQ</a>
-  <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-</nav>
 
-<main id="main">
-  <!-- ===================== HERO ===================== -->
+<main id="main" tabindex="-1">
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__inner">
-      <div>
-        <span class="hero__eyebrow"><svg class="icon"><use href="#i-eco"/></svg>Open-source music player for Android, iOS, Windows, macOS and Linux</span>
-        <h1 class="hero__title" id="hero-title">Every source.<br><em>One player.</em></h1>
-        <p class="hero__sub">Natune plays lossless music from Tidal, Qobuz, Deezer, YouTube, Telegram and more — one fast, beautiful app on your phone, tablet and desktop that puts sound quality first.</p>
-        <div class="hero__actions">
-          <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
-          <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
-        </div>
-        <div class="hero__meta">
-          <span><b id="hero-version">N20261103</b> latest</span><span class="dot"></span>
-          <span><svg class="icon"><use href="#i-star"/></svg> <b id="hero-stars">—</b> on GitHub</span><span class="dot"></span>
-          <span>License <b>GPL-3.0</b></span>
-        </div>
-      </div>
-      <div class="hero__device">
-        <div class="phone">
-          <div class="phone__screen">
-            <div class="phone__notch"></div>
-            <img src="/assets/screenshots/01-home.png" alt="Natune home screen" loading="eager">
-            <div class="phone__badge"><svg class="icon"><use href="#i-eq"/></svg>FLAC · up to 24-bit/192&nbsp;kHz</div>
+    <div class="container">
+      <div class="hero__layout">
+        <div class="hero__copy">
+          <h1 id="hero-title">Music <span>from every source.</span></h1>
+          <p class="hero__lede">An open-source Kotlin Multiplatform player for Android, iOS, Linux, macOS and Windows.</p>
+          <div class="hero__actions">
+            <a class="btn btn-filled btn-lg" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open aria-haspopup="dialog"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download Natune</a>
+            <a class="btn btn-outlined btn-lg" href="https://github.com/NatuneGroup/Natune" target="_blank" rel="noopener noreferrer"><span class="material-symbols-rounded" aria-hidden="true">code</span>View source</a>
           </div>
         </div>
+        <div class="hero__signal">
+          <span class="hero__signal-icon material-symbols-rounded" aria-hidden="true">desktop_windows</span>
+          <div><strong>Mobile and desktop</strong><p>Your library. Your sound.<br>Natune on every screen.</p></div>
+          <dl class="hero__stats" aria-label="Natune repository statistics">
+            <div><dt>License</dt><dd>GPL-3.0</dd></div>
+            <div><dt>Stars</dt><dd id="hero-stars">—</dd></div>
+            <div><dt>Latest</dt><dd id="hero-version">Latest</dd></div>
+          </dl>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== SHOWCASE ===================== -->
-  <section id="showcase" class="section section-band" aria-labelledby="showcase-title">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-phone"/></svg>Showcase</span>
-        <h2 id="showcase-title">Take a look around</h2>
-        <p>A clean, fast interface in two flavors: a Material 3 Expressive look or an Apple Music–style player. Real screenshots land here soon.</p>
-      </div>
-      <div class="shots" role="list">
-        <figure role="listitem"><img src="/assets/screenshots/01-home.png" alt="Natune home" loading="lazy"><figcaption><svg class="icon"><use href="#i-note"/></svg>Home</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/02-library.png" alt="Natune library" loading="lazy"><figcaption><svg class="icon"><use href="#i-note"/></svg>Library</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/03-player.png" alt="Natune player" loading="lazy"><figcaption><svg class="icon"><use href="#i-play"/></svg>Player</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/04-lyrics.png" alt="Synced lyrics" loading="lazy"><figcaption><svg class="icon"><use href="#i-lyrics"/></svg>Lyrics</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/05-queue.png" alt="Play queue" loading="lazy"><figcaption><svg class="icon"><use href="#i-play"/></svg>Queue</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/06-downloads.png" alt="Downloads" loading="lazy"><figcaption><svg class="icon"><use href="#i-offline"/></svg>Downloads</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/07-settings.png" alt="Settings" loading="lazy"><figcaption><svg class="icon"><use href="#i-tune"/></svg>Settings</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/08-pool.png" alt="Playback Pool" loading="lazy"><figcaption><svg class="icon"><use href="#i-hub"/></svg>Pool</figcaption></figure>
+  <section id="showcase" class="showcase" aria-label="Natune app previews">
+    <div class="container">
+      <header class="showcase__heading">
+        <p>One player, from pocket to desktop.<br>Explore the Home, Library, and Player.</p>
+        <div class="view-switch" role="group" aria-label="App preview">
+          <button type="button" data-preview-view="home" aria-pressed="true">Home</button>
+          <button type="button" data-preview-view="library" aria-pressed="false">Library</button>
+          <button type="button" data-preview-view="player" aria-pressed="false">Player</button>
+        </div>
+      </header>
+      <div class="showcase__mosaic">
+        <figure class="preview-tile preview-tile--desktop">
+          <figcaption><span class="preview-tile__label"><span class="material-symbols-rounded" aria-hidden="true">desktop_windows</span><strong>Desktop</strong></span><span class="preview-tile__detail" data-preview-detail>Linux build N20261103 · real app capture</span></figcaption>
+          <button class="preview-tile__screen" type="button" data-preview-device="desktop" aria-label="Enlarge Desktop app preview" aria-haspopup="dialog">
+            <div class="screen screen--desktop"><img class="screen__capture" src="/assets/previews/desktop-home-linux-1440.webp" srcset="/assets/previews/desktop-home-linux-720.webp 720w, /assets/previews/desktop-home-linux-1440.webp 1440w" sizes="(min-width: 1180px) 620px, (min-width: 720px) 56vw, 92vw" alt="Natune Home on Linux, running the N20261103 desktop build: Quick picks and Trending community playlists from the anonymous YouTube Music feed, beside the Home, Search and Library rail" width="1440" height="900" loading="lazy" decoding="async"></div>
+          </button>
+        </figure>
+        <figure class="preview-tile preview-tile--android">
+          <figcaption><span class="preview-tile__label"><img class="platform-icon" src="/assets/icons/android.svg" alt="" width="22" height="22"><strong>Android</strong></span><span class="preview-tile__detail">Android 7 and newer</span></figcaption>
+          <button class="preview-tile__screen" type="button" data-preview-device="android" aria-label="Enlarge Android app preview" aria-haspopup="dialog">
+            <div class="screen screen--android"><div class="device-frame"><img class="screen__capture" src="/assets/previews/android-home.webp" srcset="/assets/previews/android-home-540.webp 540w, /assets/previews/android-home.webp 1080w" sizes="(min-width: 1180px) 263px, (min-width: 1000px) 20vw, (min-width: 360px) 40vw, 84vw" alt="Natune Home on Android" width="1080" height="2400" loading="lazy" decoding="async"></div></div>
+          </button>
+        </figure>
+        <figure class="preview-tile preview-tile--ios">
+          <figcaption><span class="preview-tile__label"><img class="platform-icon" src="/assets/icons/apple.svg" alt="" width="22" height="22"><strong>iOS</strong></span><span class="preview-tile__detail">IPA · illustrative preview</span></figcaption>
+          <button class="preview-tile__screen" type="button" data-preview-device="ios" aria-label="Enlarge iOS app preview" aria-haspopup="dialog">
+            <div class="screen screen--ios"><img class="screen__capture" src="/assets/previews/ios-home-dark.svg" alt="Illustrative Natune Home on iOS" width="1320" height="2868" loading="lazy" decoding="async"></div>
+          </button>
+        </figure>
       </div>
     </div>
   </section>
 
-  <!-- ===================== FEATURES ===================== -->
-  <section id="features" class="section" aria-labelledby="features-title">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-tune"/></svg>Features</span>
-        <h2 id="features-title">Built for people who listen closely</h2>
-        <p>Serious audio plumbing under a friendly surface. Pick your sources once — Natune handles the rest.</p>
-      </div>
+  <section id="features" class="features section-band" aria-labelledby="features-title">
+    <div class="container">
+      <h2 id="features-title" class="sr-only">Natune features</h2>
       <div class="features__grid">
-        <article class="feature feature--wide reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-eq"/></svg></div>
-          <h3>Multi-source lossless playback</h3>
-          <p>Stream FLAC and hi-res audio from Tidal, Qobuz and Deezer, with YouTube and Telegram as fallbacks. Sources play in the priority order you choose — disabled sources are skipped everywhere: playback, prefetch, crossfade and downloads.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Tidal · FLAC</span>
-            <span class="chip is-on">Qobuz · 24-bit</span>
-            <span class="chip is-on">Deezer · FLAC</span>
-            <span class="chip">Telegram</span>
-            <span class="chip">YouTube · fallback</span>
-          </div></div>
+        <article class="features__card features__card--1">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--flower"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">block</span></div><span class="features__label">Multi-source music</span></div>
+          <div class="features__copy"><h3>Your music, all in one place</h3><p>Choose your providers and their priority. Optional ArchivePool adds more sources, while SponsorBlock skips marked non-music segments.</p></div>
+          <ul class="features__providers" aria-label="Example music providers"><li>YouTube Music</li><li>Tidal</li><li>Qobuz</li><li>Deezer</li><li>Telegram</li><li>ArchivePool</li></ul>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-tune"/></svg></div>
-          <h3>Audiophile-grade DSP</h3>
-          <p>System equalizer and spatial audio, EBU R128 loudness normalization, tempo and pitch controls — plus bit-perfect output over USB DACs when you want the stream untouched.</p>
-          <div class="feature__demo"><div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-swap"/></svg></div>
-          <h3>Smart transitions &amp; automix</h3>
-          <p>Crossfade and automix between tracks with bounded hand-off and recovery policies — gapless listening that survives bad networks.</p>
-          <div class="feature__demo">
-            <div class="demo-row"><span>Crossfade</span><b>6 s</b></div>
-            <div class="demo-row"><span>Automix</span><b>On</b></div>
+        <article class="features__card features__card--2">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--oval"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">lyrics</span></div><span class="features__label">Word-synced lyrics</span><button class="lyrics-toggle" type="button" data-lyrics-toggle aria-label="Pause enhanced lyrics demo" aria-pressed="false"><span class="material-symbols-rounded" aria-hidden="true">pause</span></button></div>
+          <div class="features__lyrics" data-lyrics-demo>
+            <div class="lyrics-viewport">
+              <ol class="lyrics-track" aria-label="Enhanced lyrics demo">
+                <li class="lyric-row"><span class="lyric-word" data-start="0" data-end="800">Hold</span> <span class="lyric-word" data-start="800" data-end="1050">the</span> <span class="lyric-word" data-start="1050" data-end="2500">light</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="2700" data-end="3100">till</span> <span class="lyric-word" data-start="3100" data-end="3320">the</span> <span class="lyric-word" data-start="3320" data-end="4700">morning</span> <span class="lyric-word" data-start="4700" data-end="5300">finds</span> <span class="lyric-word" data-start="5300" data-end="5900">us</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="15100" data-end="16300">Every</span> <span class="lyric-word" data-start="16300" data-end="16900">road</span> <span class="lyric-word" data-start="16900" data-end="17100">we</span> <span class="lyric-word" data-start="17100" data-end="17700">sings</span></li>
+                <li class="lyric-row"><span class="lyric-word" data-start="17900" data-end="18150">the</span> <span class="lyric-word" data-start="18150" data-end="18900">same</span> <span class="lyric-word" data-start="18900" data-end="20600">refrain</span></li>
+              </ol>
+              <div class="lyrics-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+            <p class="sr-only" data-lyrics-status aria-live="polite">Enhanced lyrics demo playing</p>
           </div>
+          <p class="lyrics-note" data-lyrics-note>Enhanced lyrics demo · illustrative timing, no audio</p>
+          <div class="features__copy"><h3>Every word, right on time</h3><p>Follow word-by-word timing, with translation and romanization when your lyrics provider supports them.</p></div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-lyrics"/></svg></div>
-          <h3>Word-by-word lyrics</h3>
-          <p>Synced, TTML and karaoke lyrics powered by Lyprio, with translation and romanization where available.</p>
-          <div class="feature__demo">
-            <div class="lyrics-line"><span class="sung">Every source,</span> <span class="current">one</span> player</div>
-          </div>
+        <article class="features__card features__card--3">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--star"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">groups</span></div><span class="features__label">Listen Together</span></div>
+          <div class="features__copy"><h3>One queue. Good company.</h3><p>Invite friends to a room and keep your shared queue in sync.</p></div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-groups"/></svg></div>
-          <h3>Listen Together</h3>
-          <p>Open a room, invite friends, suggest songs and keep playback synchronized for everyone.</p>
-          <div class="feature__demo"><div class="demo-room"><span class="demo-avatars"><i></i><i></i><i></i><i></i></span><span>4 listening now</span></div></div>
+        <article class="features__card features__card--4">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--arch"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">devices</span></div><span class="features__label">Expressive by design</span></div>
+          <div class="features__copy"><h3>A player that feels like you</h3><p>Album-art colors, Material 3 Expressive, and 18 player styles.</p></div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-note"/></svg></div>
-          <h3>Your kind of beautiful</h3>
-          <p>17 player styles — including an Apple Music–inspired look — Material 3 Expressive, liquid-glass surfaces, and dynamic colors pulled from your album art.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Material 3 Expressive</span>
-            <span class="chip is-on">Apple Music style</span>
-            <span class="chip">16 more styles</span>
-          </div></div>
+        <article class="features__card features__card--5">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--scallop"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">download_for_offline</span></div><span class="features__label">Offline listening</span></div>
+          <div class="features__copy"><h3>Keep your favorites close</h3><p>Save supported tracks offline. Back up your library locally or to Google Drive.</p></div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-laptop"/></svg></div>
-          <h3>Every platform</h3>
-          <p>One shared Kotlin Multiplatform codebase runs Natune on Android, iOS, Windows, macOS and Linux — with native adapters where desktop and iOS need them.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Android</span>
-            <span class="chip is-on">iOS</span>
-            <span class="chip is-on">Windows</span>
-            <span class="chip is-on">macOS</span>
-            <span class="chip is-on">Linux</span>
-          </div></div>
-        </article>
-      </div>
-      <ul class="feature-list reveal">
-        <li><svg class="icon"><use href="#i-offline"/></svg>Downloads &amp; offline</li>
-        <li><svg class="icon"><use href="#i-backup"/></svg>Backup &amp; restore</li>
-        <li><svg class="icon"><use href="#i-discord"/></svg>Discord rich presence</li>
-        <li><svg class="icon"><use href="#i-tv"/></svg>Android TV</li>
-        <li><svg class="icon"><use href="#i-hub"/></svg>Playback Pool</li>
-        <li><svg class="icon"><use href="#i-cast"/></svg>Cast to devices</li>
-        <li><svg class="icon"><use href="#i-star"/></svg>Last.fm &amp; ListenBrainz</li>
-        <li><svg class="icon"><use href="#i-check"/></svg>Listening stats</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ===================== PLATFORMS ===================== -->
-  <section id="platforms" class="section section-band" aria-labelledby="platforms-title">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</span>
-        <h2 id="platforms-title">Every platform. One codebase.</h2>
-        <p>Natune is a single Kotlin Multiplatform app — the same code and the same features on Android, iOS, Windows, macOS and Linux. Nightly builds for all five ship from GitHub releases.</p>
-      </div>
-      <div class="platforms__grid">
-        <article class="platform-card reveal">
-          <div class="platform-card__head"><svg class="icon"><use href="#i-phone"/></svg><div><h3>Android</h3><span class="tag">Available now</span></div></div>
-          <p>The native Android app, built from the same shared codebase — daily Nightly builds bring the newest features to Android 7 and newer, on phones and TV.</p>
-          <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Android 7 and newer</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Android TV supported</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Universal APK via GitHub releases</li>
-          </ul>
-          <div class="platform-card__actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-            <a class="btn btn-outline btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All builds</a>
-          </div>
-        </article>
-        <article class="platform-card reveal">
-          <div class="platform-card__head"><svg class="icon"><use href="#i-laptop"/></svg><div><h3>Desktop &amp; iOS</h3><span class="tag">Nightly builds</span></div></div>
-          <p>The Kotlin Multiplatform port brings Natune to Windows, macOS, Linux and iOS — one shared codebase with native adapters, so the app feels at home on every screen. iOS installs as an unsigned IPA via AltStore or SideStore.</p>
-          <div class="kmp-pills">
-            <span class="kmp-pill"><svg class="icon"><use href="#i-windows"/></svg>Windows</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>macOS</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-terminal"/></svg>Linux</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>iOS</span>
-          </div>
-          <div class="platform-card__actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-            <a class="btn btn-tonal btn-sm" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>Source</a>
-          </div>
+        <article class="features__card features__card--6">
+          <div class="features__top"><div class="features__icon feature-shape feature-shape--pentagon"><span class="features__icon-glyph material-symbols-rounded" aria-hidden="true">tune</span></div><span class="features__label">Audio controls</span></div>
+          <ul class="features__controls" aria-label="Example audio settings"><li>Tempo<strong>1.10×</strong></li><li>Pitch<strong>+1 st</strong></li><li>Sleep timer<strong>30 min</strong></li><li>Skip silence<strong>On</strong></li><li>Normalize<strong>On</strong></li></ul>
+          <div class="features__copy"><h3>Fine-tune every listen</h3><p>Set your EQ, tempo and pitch, normalize volume, skip silence or drift off with a sleep timer.</p></div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ===================== FAQ ===================== -->
-  <section id="faq" class="section" aria-labelledby="faq-title">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-help"/></svg>FAQ</span>
-        <h2 id="faq-title">Common questions</h2>
-      </div>
-      <div class="faq__list faq">
-        <details class="reveal"><summary>Is Natune free?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — completely free and open source under GPL-3.0. No ads, no paywalled features, no tracking. Some streaming sources (like Tidal or Qobuz) require your own paid subscription with that provider.</div></details>
-        <details class="reveal"><summary>Is Natune legal? What sources does it use?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Natune is a media player, not a music service — it does not host, upload, or distribute any content. It plays from sources you configure and authenticate with: Tidal, Qobuz, Deezer, YouTube, Telegram and others, using your own accounts and subscriptions where required. How you use it is your responsibility; check the terms of each provider.</div></details>
-        <details class="reveal"><summary>Does it really play lossless audio?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — where the source and your subscription provide it, Natune streams FLAC up to hi-res (24-bit/192&nbsp;kHz on supported services like Tidal and Qobuz). With a USB DAC you can enable bit-perfect output so the stream reaches the DAC unaltered.</div></details>
-        <details class="reveal"><summary>Do I need accounts for Tidal, Qobuz or Deezer?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">For full-quality streams, yes — each provider requires its own account and, for lossless tiers, a paid subscription. YouTube works without a sign-in for basic playback, and Telegram uses your own Telegram account. You choose which sources are enabled and in which order they are tried.</div></details>
-        <details class="reveal"><summary>What is the Playback Pool?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">ArchivePool is a self-hostable community pool: contributors anonymously share Tidal/Qobuz instances and accounts, the pool health-checks them on a schedule and drops dead ones, and Natune auto-discovers the surviving sources at runtime. It is optional — the app works fine with only your own accounts.</div></details>
-        <details class="reveal"><summary>Is there an iOS or desktop version?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune is now one Kotlin Multiplatform app: nightly builds for Windows, macOS, Linux and iOS ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> alongside Android. Pick your platform in the download dialog — desktop builds install natively, iOS sideloads an unsigned IPA via AltStore or SideStore. The port is young, so expect rough edges and report what you find.</div></details>
-        <details class="reveal"><summary>Stable or Nightly — which should I install?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Right now every public build is a Nightly: builds tagged <code>N…</code> ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> for all five platforms at once — newest features, occasional bugs. A Stable channel returns once the multi-platform port settles; watch <a href="/news/">the news feed</a>. Keep a backup before switching channels.</div></details>
-        <details class="reveal"><summary>What data does Natune send?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Very little by default. The news feed is fetched from this site with a plain anonymous GET — no identifiers, no telemetry. The optional “listener presence” feature is strictly opt-in: while enabled and playing, the app sends a random rotating ID, platform and app version about every 15 minutes; country/city are derived server-side from IP and rounded to ~1&nbsp;km. It never sends what you play, your accounts, or your device ID — and opting out deletes the local ID. See <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" rel="noopener">PRIVACY.md</a> for details.</div></details>
-        <details class="reveal"><summary>How do I report a bug or request a feature?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Open an issue on <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">GitHub</a> — include your app version, platform and steps to reproduce. For chat support, join the <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram group</a> or <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord server</a>.</div></details>
-        <details class="reveal"><summary>Can I donate or support the project?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">The most valuable contribution is a good bug report, a translation, or a pull request. If you want to support development financially, the maintainer accepts donations via <a href="https://github.com/sponsors/rukamori" rel="noopener">GitHub Sponsors</a> and <a href="https://ko-fi.com/rukamori" rel="noopener">Ko-fi</a>.</div></details>
-        <details class="reveal"><summary>Does Natune work on Android TV?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — the same APK supports Android TV with a leanback-friendly interface, so you can browse and play from the couch.</div></details>
-        <details class="reveal"><summary>Can I back up or move my library to a new phone?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune can export a backup of your settings, library and playlists from Settings → Backup, and restore it on another device or after a reinstall.</div></details>
+  <section id="platforms" class="platforms" aria-labelledby="platforms-title">
+    <div class="container platforms__layout">
+      <header><h2 id="platforms-title">Supported<br><span>platforms</span></h2><p>Find your build and install instructions. One Kotlin Multiplatform app, five ways to listen.</p></header>
+      <div class="platforms__list">
+        <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open data-dl-platform="android" aria-haspopup="dialog"><span class="platforms__icon"><img class="platform-icon" src="/assets/icons/android.svg" alt=""></span><span class="platforms__name"><strong>Android</strong><small>Android 7 and newer · phones and TV</small></span></a>
+        <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open data-dl-platform="ios" aria-haspopup="dialog"><span class="platforms__icon"><img class="platform-icon" src="/assets/icons/apple.svg" alt=""></span><span class="platforms__name"><strong>iOS</strong><small>Unsigned IPA · AltStore or SideStore</small></span></a>
+        <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open data-dl-platform="linux" aria-haspopup="dialog"><span class="platforms__icon"><img class="platform-icon" src="/assets/icons/linux.svg" alt=""></span><span class="platforms__name"><strong>Linux</strong><small>Debian package or AppImage · x64 and arm64</small></span></a>
+        <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open data-dl-platform="macos" aria-haspopup="dialog"><span class="platforms__icon"><img class="platform-icon" src="/assets/icons/macos.svg" alt=""></span><span class="platforms__name"><strong>macOS</strong><small>DMG · Apple silicon and Intel</small></span></a>
+        <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open data-dl-platform="windows" aria-haspopup="dialog"><span class="platforms__icon"><img class="platform-icon" src="/assets/icons/windows.svg" alt=""></span><span class="platforms__name"><strong>Windows</strong><small>x64 installer or portable ZIP</small></span></a>
       </div>
     </div>
   </section>
 
-  <!-- ===================== DOWNLOAD ===================== -->
-  <section id="download" class="section section-band download" aria-labelledby="download-title">
-    <div class="wrap">
-      <span class="eyebrow eyebrow--center"><svg class="icon"><use href="#i-download"/></svg>Install</span>
-      <h2 id="download-title" class="reveal">Get Natune</h2>
-      <p class="reveal">One app for Android, iOS, Windows, macOS and Linux. Pick your platform — the dialog matches the newest build on GitHub.</p>
-      <div class="download__actions reveal">
-        <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
-        <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
+  <section id="faq" class="faq section-band" aria-labelledby="faq-title">
+    <div class="container faq__layout">
+      <header><h2 id="faq-title">Common questions</h2></header>
+      <div>
+        <div class="faq__list">
+          <details class="faq-disclosure"><summary class="faq__question"><h3>Where can I use Natune?<span class="faq__mark material-symbols-rounded" aria-hidden="true">add</span></h3></summary><div class="faq__answer"><p>Natune runs on Android, iOS, Linux, macOS and Windows from a shared Kotlin Multiplatform codebase. The download dialog finds the newest available release for your platform, including nightlies. Android also supports TV; iOS builds require sideloading.</p><p><a href="#platforms">Choose your platform</a></p></div></details>
+          <details class="faq-disclosure"><summary class="faq__question"><h3>How do I bring my library with me?<span class="faq__mark material-symbols-rounded" aria-hidden="true">add</span></h3></summary><div class="faq__answer"><p>Export a backup from Settings → Backup before switching devices or builds. Natune supports local backup and Google Drive backup. Keep your original installation and backup until you have checked that your library and settings restored correctly.</p><p><a href="/news/">Read the latest release news</a></p></div></details>
+          <details class="faq-disclosure"><summary class="faq__question"><h3>Which music providers can I use?<span class="faq__mark material-symbols-rounded" aria-hidden="true">add</span></h3></summary><div class="faq__answer"><p>YouTube Music is joined by Tidal, Qobuz, Deezer, Telegram and other configured sources. Choose which providers are enabled and their playback priority. Use your own accounts and subscriptions where required. ArchivePool is optional, and availability and audio quality depend on the source.</p></div></details>
+          <details class="faq-disclosure"><summary class="faq__question"><h3>Is Natune free, and what about privacy?<span class="faq__mark material-symbols-rounded" aria-hidden="true">add</span></h3></summary><div class="faq__answer"><p>Natune is free software under GPL-3.0: you can inspect, change and share its code. Provider subscriptions are separate. Optional integrations can make their own network requests; review the privacy notice and each provider’s terms before enabling them.</p><p><a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" target="_blank" rel="noopener noreferrer">Read Natune’s privacy notice</a></p></div></details>
+          <details class="faq-disclosure"><summary class="faq__question"><h3>Does Natune supply the music?<span class="faq__mark material-symbols-rounded" aria-hidden="true">add</span></h3></summary><div class="faq__answer"><p>No. Natune is a player, not a hosting service. It does not upload or distribute music; playback comes from the providers you configure, with your accounts and subscriptions where needed. It does not remove DRM or grant rights to content. You are responsible for following provider terms and applicable law.</p></div></details>
+        </div>
+        <a class="btn btn-tonal faq__more" href="https://github.com/NatuneGroup/Natune/issues" target="_blank" rel="noopener noreferrer">Ask the community<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
       </div>
-      <noscript><p class="download__note">JavaScript is off — download Natune straight from the <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases page</a>.</p></noscript>
-      <p class="reveal download__meta">Newest build <b id="dl-latest">N20261103</b> · nightly channel</p>
-      <p class="download__note reveal">Natune does not host, upload, or distribute any music, videos or other media. It is a player that streams from sources you configure — Tidal, Qobuz, Deezer, YouTube, Telegram and others — using your own accounts and subscriptions where required. Natune is free software under GPL-3.0 and is not affiliated with Tidal, Qobuz, Deezer, YouTube, Telegram or Google.</p>
+    </div>
+  </section>
+
+  <section id="download" class="download" aria-labelledby="download-title">
+    <div class="container">
+      <div class="download__panel">
+        <div class="download__copy"><h2 id="download-title">Install <span>Natune</span></h2><p>Start with the newest GitHub build.</p></div>
+        <div class="download__actions">
+          <a class="btn btn-filled btn-lg" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer" data-dl-open aria-haspopup="dialog"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download Natune</a>
+          <a class="btn btn-outlined" href="https://github.com/NatuneGroup/Natune" target="_blank" rel="noopener noreferrer"><span class="material-symbols-rounded" aria-hidden="true">code</span>View source</a>
+        </div>
+      </div>
+      <noscript><p class="noscript-note">JavaScript is off. The download links take you directly to <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer">GitHub releases</a>.</p></noscript>
     </div>
   </section>
 </main>
 
-<!-- ===================== FOOTER ===================== -->
 <footer class="footer">
-  <div class="footer__inner">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <a class="navbar__brand" href="/"><img src="/assets/img/logo.png" alt="" width="34" height="34">Natune</a>
-        <p>Every source. One player. An open-source music player for Android, iOS, Windows, macOS and Linux — Natune grew out of <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">ArchiveTune</a>.</p>
-      </div>
-      <div class="footer__cols">
-        <div class="footer__col">
-          <h4>Project</h4>
-          <a href="https://github.com/NatuneGroup/Natune" rel="noopener">Source <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">Releases <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">Issues <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/blob/main/LICENSE" rel="noopener">GPL-3.0 <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" rel="noopener">Privacy <svg class="icon"><use href="#i-outward"/></svg></a>
-        </div>
-        <div class="footer__col">
-          <h4>Community</h4>
-          <a href="/news/">News</a>
-          <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">ArchiveTune <svg class="icon"><use href="#i-outward"/></svg></a>
-        </div>
-        <div class="footer__col">
-          <h4>Get the app</h4>
-          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All platforms <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">Nightly builds <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">Report an issue <svg class="icon"><use href="#i-outward"/></svg></a>
-        </div>
-      </div>
-    </div>
-    <div class="footer__legal">
-      <p>Natune does not host, upload, or distribute any music, videos or other media. It is a client that plays content from sources you configure, using your own accounts and subscriptions. Natune is an open-source project and is not affiliated with Tidal, Qobuz, Deezer, YouTube, Telegram, Apple or Google. All trademarks belong to their respective owners.</p>
-      <p>Built by the Natune team and contributors · © <span id="year">2026</span> NatuneGroup</p>
-    </div>
+  <div class="container">
+    <div class="footer__top"><a class="footer__brand" href="/" aria-label="Natune home"><img src="/assets/img/logo-128.png" alt="" width="50" height="50" loading="lazy"><strong>Natune</strong></a><p>Every source. One player.</p></div>
+    <nav class="footer__links" aria-label="Footer navigation">
+      <a href="https://github.com/NatuneGroup/Natune" target="_blank" rel="noopener noreferrer">Source<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/releases" target="_blank" rel="noopener noreferrer">Releases<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/issues" target="_blank" rel="noopener noreferrer">Issues<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="/news/">News</a>
+      <a href="#features">Features</a>
+      <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+    </nav>
+    <div class="footer__bottom"><p>Natune plays content from your configured providers. It does not host, upload or distribute music, bypass DRM, or replace required accounts and subscriptions. Respect each provider’s terms and the rights of creators.</p><p>Natune is independent of Google, YouTube, Tidal, Qobuz, Deezer, Telegram, Apple and Microsoft. All trademarks belong to their owners.</p><p>Made by NatuneGroup and contributors.<br>© <span id="year">{{year}}</span> · GPL-3.0</p></div>
   </div>
 </footer>
 
-<!-- ===================== DOWNLOAD DIALOG ===================== -->
 <div class="dlmodal" id="dlmodal" hidden>
   <div class="dlmodal__backdrop" data-dl-close></div>
-  <div class="dlmodal__panel" role="dialog" aria-modal="true" aria-labelledby="dlmodal-title">
-    <div class="dlmodal__head">
-      <div>
-        <h2 id="dlmodal-title">Download Natune</h2>
-        <p class="dlmodal__sub" id="dlmodal-sub">Pick your platform — we match the newest build on GitHub.</p>
-      </div>
-      <button type="button" class="dlmodal__close" data-dl-close aria-label="Close download dialog">
-        <svg class="icon"><use href="#i-close"/></svg>
-      </button>
-    </div>
+  <div class="dlmodal__panel" role="dialog" aria-modal="true" aria-labelledby="dlmodal-title" tabindex="-1">
+    <div class="dlmodal__head"><div><h2 id="dlmodal-title">Download Natune</h2><p class="dlmodal__sub" id="dlmodal-sub">Pick your platform — we match the newest build on GitHub.</p></div><button class="icon-button dlmodal__close" type="button" data-dl-close aria-label="Close download dialog"><span class="material-symbols-rounded" aria-hidden="true">close</span></button></div>
     <div class="dlmodal__tabs" role="group" aria-label="Choose a platform">
-      <button type="button" class="dlmodal__tab" data-platform="android" aria-pressed="false">
-        <svg class="icon"><use href="#i-phone"/></svg><span>Android</span><small>APK</small>
-      </button>
-      <button type="button" class="dlmodal__tab" data-platform="ios" aria-pressed="false">
-        <svg class="icon"><use href="#i-apple"/></svg><span>iOS</span><small>IPA</small>
-      </button>
-      <button type="button" class="dlmodal__tab" data-platform="linux" aria-pressed="false">
-        <svg class="icon"><use href="#i-terminal"/></svg><span>Linux</span><small>.deb / AppImage</small>
-      </button>
-      <button type="button" class="dlmodal__tab" data-platform="macos" aria-pressed="false">
-        <svg class="icon"><use href="#i-laptop"/></svg><span>macOS</span><small>DMG</small>
-      </button>
-      <button type="button" class="dlmodal__tab" data-platform="windows" aria-pressed="false">
-        <svg class="icon"><use href="#i-windows"/></svg><span>Windows</span><small>.exe / .zip</small>
-      </button>
+      <button class="dlmodal__tab" type="button" data-platform="android" aria-pressed="false"><img class="platform-icon" src="/assets/icons/android.svg" alt=""><span><strong>Android</strong><small>APK</small></span><span class="material-symbols-rounded platform-check" aria-hidden="true">check</span></button>
+      <button class="dlmodal__tab" type="button" data-platform="ios" aria-pressed="false"><img class="platform-icon" src="/assets/icons/apple.svg" alt=""><span><strong>iOS</strong><small>IPA</small></span><span class="material-symbols-rounded platform-check" aria-hidden="true">check</span></button>
+      <button class="dlmodal__tab" type="button" data-platform="linux" aria-pressed="false"><img class="platform-icon" src="/assets/icons/linux.svg" alt=""><span><strong>Linux</strong><small>.deb / AppImage</small></span><span class="material-symbols-rounded platform-check" aria-hidden="true">check</span></button>
+      <button class="dlmodal__tab" type="button" data-platform="macos" aria-pressed="false"><img class="platform-icon" src="/assets/icons/macos.svg" alt=""><span><strong>macOS</strong><small>DMG</small></span><span class="material-symbols-rounded platform-check" aria-hidden="true">check</span></button>
+      <button class="dlmodal__tab" type="button" data-platform="windows" aria-pressed="false"><img class="platform-icon" src="/assets/icons/windows.svg" alt=""><span><strong>Windows</strong><small>Installer or portable ZIP</small></span><span class="material-symbols-rounded platform-check" aria-hidden="true">check</span></button>
     </div>
-    <h3 class="dlmodal__h">Install</h3>
-    <ol class="dlmodal__steps" id="dl-steps"></ol>
-    <h3 class="dlmodal__h">Download</h3>
-    <div class="dlmodal__links" id="dl-links"><p class="dlmodal__hint">Loading the newest build…</p></div>
-    <p class="dlmodal__hint" id="dl-hint"></p>
-    <p class="dlmodal__foot">Every build is published on <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a>. All current builds are rolling nightlies — a stable channel returns when the multi-platform port settles.</p>
+    <div class="dlmodal__selection">
+      <div class="dlmodal__install"><div><h3 class="dlmodal__h">Install</h3><ol class="dlmodal__steps" id="dl-steps"></ol><p class="dlmodal__hint" id="dl-hint"></p></div><div><h3 class="dlmodal__h">Download</h3><div class="dlmodal__links" id="dl-links" role="status" aria-live="polite" aria-atomic="true"><p class="dlmodal__hint">Loading the newest build…</p></div></div></div>
+      <p class="dlmodal__foot">Builds come directly from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener noreferrer">GitHub releases</a>, including nightly builds. Use your own provider accounts and subscriptions where required.</p>
+    </div>
+    <div class="dlmodal__footer"><button class="btn btn-outlined" type="button" data-dl-close>Close</button></div>
   </div>
 </div>
 
+<dialog class="site-dialog preview-dialog" id="preview-dialog" aria-label="Natune app preview">
+  <form method="dialog" class="preview-dialog__close"><button class="icon-button" type="submit" aria-label="Close app preview" autofocus><span class="material-symbols-rounded" aria-hidden="true">close</span></button></form>
+  <div class="preview-dialog__screen"><img id="preview-image" alt=""></div>
+  <a class="preview-dialog__original" id="preview-original" href="/assets/previews/desktop-home-linux-1440.webp" target="_blank" rel="noopener noreferrer">Open full-size preview<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+</dialog>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/landing.js" defer></script>
+<script src="/assets/js/lyrics-demo.js" defer></script>
 </body>
 </html>

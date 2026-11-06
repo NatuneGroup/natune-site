@@ -1,4 +1,4 @@
-// Natune site chrome: navbar state, mobile drawer, scroll reveal, GitHub meta,
+// Natune site chrome: navbar state, mobile drawer, footer year, GitHub meta,
 // and the multi-platform download dialog.
 (() => {
   const nav = document.getElementById('navbar');
@@ -12,7 +12,10 @@
     const setDrawer = (open) => {
       drawer.classList.toggle('is-open', open);
       burger.setAttribute('aria-expanded', String(open));
-      burger.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      const icon = burger.querySelector('use');
+      if (icon) icon.setAttribute('href', open ? '#i-close' : '#i-menu');
+      else burger.querySelector('.material-symbols-rounded')?.replaceChildren(open ? 'close' : 'menu');
     };
     const burgerVisible = () => window.getComputedStyle(burger).display !== 'none';
     burger.addEventListener('click', () => setDrawer(!drawer.classList.contains('is-open')));
@@ -38,33 +41,56 @@
       if (focusInside) refocusAfterDrawer();
     };
     window.addEventListener('resize', onResize);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && drawer.classList.contains('is-open')) {
+        setDrawer(false);
+        refocusAfterDrawer();
+      }
+    });
   }
-
-  const io = new IntersectionObserver(
-    (entries) => entries.forEach((en) => en.isIntersecting && en.target.classList.add('is-visible')),
-    { threshold: 0.12 }
-  );
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 
-  // ---------- GitHub data (progressive enhancement; fails silently) ----------
+  // ---------- GitHub data (progressive enhancement; fails loudly in-dialog) ----------
   const GH_REPO = 'NatuneGroup/Natune';
   const RELEASES_URL = `https://github.com/${GH_REPO}/releases`;
   const GH_API = `https://api.github.com/repos/${GH_REPO}`;
   const GH_HEADERS = { Accept: 'application/vnd.github+json' };
 
+  // Only pages with a GitHub-backed element should touch api.github.com: the
+  // news and admin pages have none, and the anonymous API is rate limited.
+  const modal = document.getElementById('dlmodal');
+  const stars = document.getElementById('hero-stars');
+  const ver = document.getElementById('hero-version');
+  if (!stars && !ver && !modal) return;
+
   // The newest release INCLUDING prereleases: nightlies are tagged like
   // N20261103 and /releases/latest would skip them. Shared by the hero badge
   // and the download dialog so we only burn one API request.
   let releasesPromise = null;
+  const fetchReleases = async () => {
+    try {
+      const response = await fetch(`${GH_API}/releases?per_page=15`, { headers: GH_HEADERS });
+      if (!response.ok) {
+        console.warn(`Natune: GitHub releases request failed (HTTP ${response.status})`);
+        return { ok: false, list: [] };
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? { ok: true, list: data } : { ok: false, list: [] };
+    } catch (error) {
+      console.warn('Natune: could not reach GitHub for releases', error);
+      return { ok: false, list: [] };
+    }
+  };
+  // A failed request is not cached: the dialog offers Retry, and a rate-limited
+  // visitor should not stay broken for the rest of the page view.
   const loadReleases = () => {
     if (!releasesPromise) {
-      releasesPromise = fetch(`${GH_API}/releases?per_page=15`, { headers: GH_HEADERS })
-        .then((r) => (r.ok ? r.json() : []))
-        .then((d) => (Array.isArray(d) ? d : []))
-        .catch(() => []);
+      releasesPromise = fetchReleases().then((result) => {
+        if (!result.ok) releasesPromise = null;
+        return result;
+      });
     }
     return releasesPromise;
   };
@@ -88,23 +114,25 @@
     }
   };
 
-  const stars = document.getElementById('hero-stars');
-  const ver = document.getElementById('hero-version');
-  const latestTag = document.getElementById('dl-latest');
-  fetch(GH_API, { headers: GH_HEADERS })
-    .then((r) => (r.ok ? r.json() : null))
-    .then((d) => { if (d && stars) stars.textContent = d.stargazers_count.toLocaleString('en-US'); })
-    .catch(() => {});
-  loadReleases().then((list) => {
+  if (stars) {
+    fetch(GH_API, { headers: GH_HEADERS })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (Number.isFinite(d?.stargazers_count)) {
+          stars.textContent = d.stargazers_count >= 10000
+            ? `${Math.round(d.stargazers_count / 1000)}K`
+            : d.stargazers_count.toLocaleString('en-US');
+        }
+      })
+      .catch(() => {});
+  }
+  loadReleases().then(({ ok, list }) => {
+    if (!ok) return;
     const rel = newestAppRelease(list);
-    if (rel && rel.tag_name) {
-      if (ver) ver.textContent = rel.tag_name;
-      if (latestTag) latestTag.textContent = rel.tag_name;
-    }
+    if (rel && rel.tag_name && ver) ver.textContent = rel.tag_name;
   });
 
   // ---------- download dialog ----------
-  const modal = document.getElementById('dlmodal');
   if (!modal) return;
   const panel = modal.querySelector('.dlmodal__panel');
   const tabs = [...modal.querySelectorAll('.dlmodal__tab')];
@@ -233,9 +261,36 @@
     el.appendChild(p);
   };
 
+  const unavailable = (el, key) => {
+    el.textContent = '';
+    const p = document.createElement('p');
+    p.className = 'dlmodal__hint';
+    p.textContent = 'Could not reach GitHub, so the build list did not load. ';
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'dlmodal__retry';
+    retry.textContent = 'Try again';
+    retry.addEventListener('click', () => renderLinks(key));
+    const a = document.createElement('a');
+    a.href = RELEASES_URL;
+    a.rel = 'noopener';
+    a.textContent = 'Browse release files';
+    p.append(retry, document.createTextNode(' or '), a, document.createTextNode('.'));
+    el.appendChild(p);
+  };
+
+  let renderRequest = 0;
   const renderLinks = async (key) => {
+    const request = ++renderRequest;
     linksEl.innerHTML = '<p class="dlmodal__hint">Loading the newest build…</p>';
-    const list = await loadReleases();
+    const { ok, list } = await loadReleases();
+    // A slow release request must not overwrite a newer platform selection.
+    if (request !== renderRequest) return;
+    if (!ok) {
+      unavailable(linksEl, key);
+      if (subEl) subEl.textContent = SUB_DEFAULT;
+      return;
+    }
     const resolved = resolvePlatform(list, key);
     linksEl.textContent = '';
     if (!resolved) {
@@ -269,6 +324,7 @@
 
   let current = detectPlatform();
   const selectPlatform = (key, { focus = false } = {}) => {
+    if (!Object.hasOwn(PLATFORMS, key)) return;
     current = key;
     tabs.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.platform === key)));
     renderSteps(key);
@@ -282,23 +338,48 @@
 
   let lastFocused = null;
   const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-  const openDl = () => {
-    lastFocused = document.activeElement;
+  const canRestoreFocus = (el) => {
+    if (!el?.isConnected || el.matches(':disabled') || (!el.matches(FOCUSABLE) && !el.hasAttribute('tabindex'))) return false;
+    if (drawer?.contains(el) && !drawer.classList.contains('is-open')) return false;
+    for (let parent = el; parent; parent = parent.parentElement) {
+      const style = window.getComputedStyle(parent);
+      if (parent.hidden || parent.inert || style.display === 'none' || ['hidden', 'collapse'].includes(style.visibility)) return false;
+    }
+    return true;
+  };
+  const background = [...document.body.children].filter((el) => el !== modal && !['SCRIPT', 'SVG'].includes(el.tagName));
+  const inertState = new Map();
+  const openDl = (opener) => {
+    if (!modal.hidden) return;
+    lastFocused = opener || document.activeElement;
+    background.forEach((el) => {
+      inertState.set(el, el.inert);
+      el.inert = true;
+    });
     modal.hidden = false;
     document.body.classList.add('dl-open');
-    selectPlatform(current, { focus: true });
+    selectPlatform(opener?.dataset.dlPlatform || current, { focus: true });
   };
   const closeDl = () => {
+    if (modal.hidden) return;
+    renderRequest++;
     modal.hidden = true;
     document.body.classList.remove('dl-open');
+    inertState.forEach((value, el) => { el.inert = value; });
+    inertState.clear();
     if (subEl) subEl.textContent = SUB_DEFAULT;
-    if (lastFocused && lastFocused.focus) lastFocused.focus();
+    // A resize can hide the original opener while the dialog is open.
+    const target = canRestoreFocus(lastFocused) ? lastFocused : canRestoreFocus(burger) ? burger : document.getElementById('main');
+    if (target && target !== lastFocused && target !== burger && !target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+    }
+    if (canRestoreFocus(target)) target.focus({ preventScroll: true });
   };
 
   document.querySelectorAll('[data-dl-open]').forEach((el) =>
     el.addEventListener('click', (e) => {
       e.preventDefault();
-      openDl();
+      openDl(el);
     })
   );
   modal.addEventListener('click', (e) => {

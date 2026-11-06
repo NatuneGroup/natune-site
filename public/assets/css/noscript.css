@@ -1,4 +1,0 @@
-/* Loaded only via <noscript><link> on the landing page: when JavaScript is
-   disabled, the scroll-reveal elements must be visible immediately. Kept in a
-   file (not an inline <style>) so style-src 'self' applies cleanly. */
-.reveal { opacity: 1 !important; transform: none !important; transition: none !important; }

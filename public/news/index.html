@@ -3,65 +3,82 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
 <title>News · Natune</title>
 <meta name="description" content="Natune announcements — release notes, known issues and project news.">
-<meta name="theme-color" content="#0d110d">
+<meta name="theme-color" content="#0d140e">
+<meta property="og:title" content="Natune news — announcements and release notes">
+<meta property="og:description" content="Release notes, known issues and project news for the Natune music player, the same feed the app shows.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://natune.pages.dev/news/">
+<meta property="og:site_name" content="Natune">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://natune.pages.dev/assets/img/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Natune — every source, one player">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://natune.pages.dev/news/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="preload" href="/assets/fonts/googlesansflex-rounded.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/material-symbols-rounded.woff2" as="font" type="font/woff2" crossorigin>
+<script src="/assets/js/theme.js"></script>
+<link rel="stylesheet" href="/assets/css/landing.css">
 </head>
-<body>
+<body class="landing">
 <a class="skip-link" href="#main">Skip to main content</a>
-<svg class="svg-defs" aria-hidden="true">
-  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></symbol>
-  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M16 1H8C6.34 1 5 2.34 5 4v16c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V4c0-1.66-1.34-3-3-3zm-2 20h-4v-1h4v1zm3-4H7V4h10v13z"/></symbol>
-  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></symbol>
-  <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4C2.9 4 2 4.9 2 6v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></symbol>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-light" viewBox="0 0 24 24"><path d="M11 1h2v3h-2zm0 19h2v3h-2zM1 11h3v2H1zm19 0h3v2h-3zM3.5 4.9l1.4-1.4L7 5.6 5.6 7zm13.5 13.5 1.4-1.4 2.1 2.1-1.4 1.4zm0-12.8 2.1-2.1 1.4 1.4L18.4 7zM3.5 19.1 5.6 17 7 18.4l-2.1 2.1zM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></symbol>
+  <symbol id="i-dark" viewBox="0 0 24 24"><path d="M20.2 15.5A8.6 8.6 0 0 1 8.5 3.8a9 9 0 1 0 11.7 11.7z"/></symbol>
   <symbol id="i-news" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9 12H7v-2h3v2zm0-4H7V9h3v2zm7 4h-5v-6h5v6z"/></symbol>
-  <symbol id="i-help" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17h-2v-2h2v2zm2.07-7.75-.9.92A3.5 3.5 0 0 0 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26A2 2 0 1 0 10 9H8a4 4 0 1 1 8 0c0 .88-.36 1.68-.93 2.25z"/></symbol>
-  <symbol id="i-download" viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm14-9h-4V3H9v8H5l7 8 7-8z"/></symbol>
 </svg>
-<header class="navbar is-scrolled">
-  <a class="navbar__brand" href="/">
-    <img src="/assets/img/logo.png" alt="Natune logo" width="34" height="34">
-    Natune
-  </a>
-  <nav class="navbar__links" aria-label="Main navigation">
-    <a href="/#showcase">Showcase</a>
-    <a href="/#features">Features</a>
-    <a href="/#platforms">Platforms</a>
-    <a href="/news/" aria-current="page">News</a>
-    <a href="/#faq">FAQ</a>
-  </nav>
-  <a class="btn btn-primary btn-sm navbar__cta" href="/#download">Download</a>
-  <button class="navbar__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
-    <svg class="icon icon-lg"><use href="#i-menu"/></svg>
-  </button>
-</header>
-<nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
-  <a href="/#showcase"><svg class="icon"><use href="#i-phone"/></svg>Showcase</a>
-  <a href="/#features"><svg class="icon"><use href="#i-tune"/></svg>Features</a>
-  <a href="/#platforms"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</a>
-  <a href="/news/"><svg class="icon"><use href="#i-news"/></svg>News</a>
-  <a href="/#faq"><svg class="icon"><use href="#i-help"/></svg>FAQ</a>
-  <a class="btn btn-primary" href="/#download"><svg class="icon"><use href="#i-download"/></svg>Download</a>
-</nav>
 
-<main id="main" class="section">
-  <div class="wrap">
+<header class="navbar" id="navbar">
+  <div class="container navbar__inner">
+    <a class="navbar__brand" href="/" aria-label="Natune home">
+      <img class="navbar__brand-mark" src="/assets/img/logo-128.png" alt="" width="58" height="58">
+      <span>Natune</span>
+    </a>
+    <nav class="navbar__links" aria-label="Main navigation">
+      <a href="/#showcase">Showcase</a>
+      <a href="/#features">Features</a>
+      <a href="/#platforms">Platforms</a>
+      <a href="/news/" aria-current="location">News</a>
+      <a href="/#faq">FAQ</a>
+      <a class="btn btn-filled btn-sm" href="/#download"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download</a>
+    </nav>
+    <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme"><svg class="icon" aria-hidden="true"><use href="#i-light"/></svg></button>
+    <button class="icon-button navbar__menu" id="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu"><span class="material-symbols-rounded" aria-hidden="true">menu</span></button>
+  </div>
+  <nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
+    <div class="container">
+      <a href="/#showcase"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Showcase</a>
+      <a href="/#features"><span class="material-symbols-rounded" aria-hidden="true">tune</span>Features</a>
+      <a href="/#platforms"><span class="material-symbols-rounded" aria-hidden="true">devices</span>Platforms</a>
+      <a href="/news/" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-news"/></svg>News</a>
+      <a href="/#faq"><span class="material-symbols-rounded" aria-hidden="true">help</span>FAQ</a>
+      <a class="navbar__drawer-download" href="/#download"><span class="material-symbols-rounded" aria-hidden="true">download</span>Download</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main" class="page" tabindex="-1">
+  <div class="container">
     <div id="news-list-view">
-      <div class="section-head">
+      <header class="page__head">
         <span class="eyebrow">News</span>
-        <h2>Announcements</h2>
-        <p>Release notes, known issues and project news — the same feed the Android app shows.</p>
-      </div>
-      <div class="news-list" id="news-list"><p class="news-state">Loading…</p></div>
+        <h1>Announcements</h1>
+        <p>Release notes, known issues and project news — the same feed the Natune app shows.</p>
+      </header>
+      <noscript><p class="news-state">News needs JavaScript. The raw feed is <a href="/api/news/index.json">available as JSON</a>.</p></noscript>
+      <div class="news-list" id="news-list"><p class="news-state">Loading announcements…</p></div>
     </div>
     <article class="news-article" id="news-article-view" hidden>
-      <p><a href="/news/" id="news-back">&larr; All announcements</a></p>
+      <p class="news-back"><a href="/news/" id="news-back">&larr; All announcements</a></p>
       <h1 id="na-title"></h1>
       <div class="meta" id="na-meta"></div>
       <div id="na-images"></div>
@@ -69,6 +86,22 @@
     </article>
   </div>
 </main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top"><a class="footer__brand" href="/" aria-label="Natune home"><img src="/assets/img/logo-128.png" alt="" width="50" height="50" loading="lazy"><strong>Natune</strong></a><p>Every source. One player.</p></div>
+    <nav class="footer__links" aria-label="Footer navigation">
+      <a href="https://github.com/NatuneGroup/Natune" target="_blank" rel="noopener noreferrer">Source<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/releases" target="_blank" rel="noopener noreferrer">Releases<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/issues" target="_blank" rel="noopener noreferrer">Issues<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="/news/" aria-current="page">News</a>
+      <a href="/#features">Features</a>
+      <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" target="_blank" rel="noopener noreferrer">Privacy<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+      <a href="https://github.com/NatuneGroup/Natune/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0<span class="material-symbols-rounded" aria-hidden="true">arrow_outward</span></a>
+    </nav>
+    <div class="footer__bottom"><p>Natune plays content from your configured providers. It does not host, upload or distribute music, bypass DRM, or replace required accounts and subscriptions. Respect each provider’s terms and the rights of creators.</p><p>Natune is independent of Google, YouTube, Tidal, Qobuz, Deezer, Telegram, Apple and Microsoft. All trademarks belong to their owners.</p><p>Made by NatuneGroup and contributors.<br>© <span id="year">{{year}}</span> · GPL-3.0</p></div>
+  </div>
+</footer>
 
 <script src="/assets/vendor/marked.umd.js" defer></script>
 <script src="/assets/vendor/purify.min.js" defer></script>

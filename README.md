@@ -11,6 +11,7 @@ Public website for **Natune** — <https://natune.pages.dev> — hosted on Cloud
 | `functions/api/` | Pages Functions (the only dynamic part): `/admin/` login + news CRUD, `/news/` 404 guard |
 | `migrations/` | D1 schema for the atomic login-attempt throttle |
 | `scripts/` | `build.mjs` (public → dist), `validate-news.mjs` (contract check), `test-security.mjs` (renderer XSS + throttle tests) |
+| `docs/previews.md` | Which app previews are real captures, which are labelled illustrations, and the capture provenance |
 | `.github/workflows/deploy.yml` | push to `main` → build → `wrangler pages deploy` |
 
 ## News contract (consumed by the app)

@@ -59,19 +59,42 @@
       FORBID_TAGS: ['style', 'form', 'input', 'textarea', 'select', 'option', 'button', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
       FORBID_ATTR: ['style'],
     });
+  // Sanitized markdown can contain a table wider than the article column. The
+  // wrapper is added after sanitization (trusted markup), is scrollable and
+  // takes focus so keyboard users can reach every column.
+  const scrollableTables = (html) => {
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    template.content.querySelectorAll('table').forEach((table) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'md-table';
+      wrapper.tabIndex = 0;
+      wrapper.setAttribute('role', 'region');
+      wrapper.setAttribute('aria-label', 'Table, scroll sideways to see every column');
+      table.replaceWith(wrapper);
+      wrapper.appendChild(table);
+    });
+    return template.innerHTML;
+  };
   const md = (src) => {
     if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') {
       // Vendor scripts blocked/missing: text-only fallback, never unsanitized HTML.
       return '<p>' + esc(String(src)).replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
     }
-    return sanitize(marked.parse(String(src)));
+    return scrollableTables(sanitize(marked.parse(String(src))));
   };
 
-  const fmtDate = (d) => {
-    const sec = typeof d === 'string' ? Number(d) : d;
-    return new Date(sec * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const dateLocale = document.documentElement.lang || 'en-GB';
+  const fmtDate = (value) => {
+    const sec = typeof value === 'string' ? Number(value) : value;
+    if (!Number.isFinite(sec) || sec <= 0) return 'Unknown date';
+    return new Date(sec * 1000).toLocaleDateString(dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
   };
   const imgArr = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
+  const timestamp = (item) => {
+    const sec = Number(item.Date);
+    return Number.isFinite(sec) && sec > 0 ? sec : 0;
+  };
 
   const listView = $('news-list-view');
   const articleView = $('news-article-view');
@@ -79,7 +102,7 @@
   fetch('/api/news/index.json', { cache: 'no-store' })
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))))
     .then((items) => {
-      items = (Array.isArray(items) ? items : []).slice().sort((a, b) => Number(b.Date) - Number(a.Date));
+      items = (Array.isArray(items) ? items : []).slice().sort((a, b) => timestamp(b) - timestamp(a));
       const params = new URLSearchParams(location.search);
       const id = params.get('id');
       if (id) {
@@ -102,7 +125,7 @@
     list.innerHTML = items
       .map(
         (it) => `<a class="news-card" href="/news/?id=${encodeURIComponent(it.id)}">
-          <h3>${esc(it.Title)}${it.Important ? ' <span class="badge-important">Important</span>' : ''}</h3>
+          <h2>${esc(it.Title)}${it.Important ? ' <span class="badge-important">Important</span>' : ''}</h2>
           <div class="meta">${esc(it.Author)} · ${fmtDate(it.Date)}</div>
           ${it.Description ? `<p>${esc(it.Description)}</p>` : ''}
         </a>`

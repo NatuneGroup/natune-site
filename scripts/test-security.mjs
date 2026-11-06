@@ -97,6 +97,7 @@ const payloads = [
   ['formaction', '<form><button formaction="javascript:globalThis.__xss=1">x</button></form>'],
   ['link w/ title quote', '[x](https://ok.example "onmouseover="globalThis.__xss=1)'],
   ['details toggle', '<details open ontoggle="globalThis.__xss=1">x</details>'],
+  ['table cell payload', '| A | B |\n| --- | --- |\n| <img src=x onerror="globalThis.__xss=1"> | [x](javascript:globalThis.__xss=1) |'],
 ];
 
 for (const [name, md] of payloads) {
@@ -122,6 +123,22 @@ for (const [name, md] of payloads) {
   ok(!!d.querySelector('#na-body img[src="https://cdn.example.com/a.png"]'), 'https image kept');
   ok(!!d.querySelector('#na-body strong') && !!d.querySelector('#na-body code') && !!d.querySelector('#na-body del'),
     'emphasis/code/del render');
+}
+
+{
+  const window = await renderArticleBody(
+    '| Architecture | Android | iOS | Linux | macOS | Windows |\n| --- | --- | --- | --- | --- | --- |\n| Supported | arm64-v8a | arm64 | AppImage | Apple silicon | Installer |'
+  );
+  const d = window.document;
+  const wrapper = d.querySelector('#na-body .md-table');
+  ok(!!wrapper, 'a wide table is wrapped in a scroll container');
+  ok(wrapper && wrapper.tabIndex === 0, 'the scroll container is keyboard focusable');
+  ok(wrapper && wrapper.getAttribute('role') === 'region', 'the scroll container is a named region');
+  ok(wrapper && (wrapper.getAttribute('aria-label') || '').length > 0, 'the scroll container has an accessible name', wrapper && wrapper.getAttribute('aria-label'));
+  ok(wrapper && wrapper.querySelector(':scope > table thead th:last-child'), 'the last column stays in the table');
+  ok(wrapper && wrapper.parentElement && !wrapper.parentElement.closest('.md-table'), 'the table is wrapped exactly once');
+  ok(d.querySelectorAll('#na-body > .md-table').length === 1, 'the wrapper sits at the top level of the body');
+  window.close();
 }
 
 /* ============================ 2. throttle (D1) ============================ */
