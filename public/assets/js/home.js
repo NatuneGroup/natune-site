@@ -39,7 +39,11 @@
       if (!Array.isArray(items) || !list) return;
       const posts = items
         .filter((it) => it && safeId(it.id) && typeof it.Title === 'string')
-        .map((it) => ({ ...it, when: Number(it.Date) * 1000 }))
+        // Out-of-range dates (beyond ±8.64e15 ms, where toISOString throws) count as undated, so they sort last.
+        .map((it) => {
+          const ms = Number(it.Date) * 1000;
+          return { ...it, when: Math.abs(ms) <= 8.64e15 ? ms : 0 };
+        })
         .sort((a, b) => (b.when || 0) - (a.when || 0))
         .slice(0, 3);
       if (!posts.length) return;
