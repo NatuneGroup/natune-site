@@ -9,13 +9,15 @@
 <meta property="og:title" content="Natune · Every source. One player.">
 <meta property="og:description" content="Open-source music player for Android, iOS, Windows, macOS and Linux — multi-source lossless playback, karaoke lyrics, smart transitions.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://natune.pages.dev/assets/img/logo.png">
+<meta property="og:image" content="https://natune.app/assets/img/logo.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/fonts/googlesansflex-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="canonical" href="https://natune.app/">
 <link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/home.css">
 <noscript><link rel="stylesheet" href="/assets/css/noscript.css"></noscript>
 </head>
 <body>
@@ -72,7 +74,7 @@
     Natune
   </a>
   <nav class="navbar__links" aria-label="Main navigation">
-    <a href="/#showcase">Showcase</a>
+    <a href="/#how">How it works</a>
     <a href="/#features">Features</a>
     <a href="/#platforms">Platforms</a>
     <a href="/news/">News</a>
@@ -84,7 +86,7 @@
   </button>
 </header>
 <nav class="navbar__drawer" id="drawer" aria-label="Mobile navigation">
-  <a href="/#showcase"><svg class="icon"><use href="#i-phone"/></svg>Showcase</a>
+  <a href="/#how"><svg class="icon"><use href="#i-hub"/></svg>How it works</a>
   <a href="/#features"><svg class="icon"><use href="#i-tune"/></svg>Features</a>
   <a href="/#platforms"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</a>
   <a href="/news/"><svg class="icon"><use href="#i-news"/></svg>News</a>
@@ -94,178 +96,177 @@
 
 <main id="main">
   <!-- ===================== HERO ===================== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__inner">
-      <div>
-        <span class="hero__eyebrow"><svg class="icon"><use href="#i-eco"/></svg>Open-source music player for Android, iOS, Windows, macOS and Linux</span>
-        <h1 class="hero__title" id="hero-title">Every source.<br><em>One player.</em></h1>
-        <p class="hero__sub">Natune plays lossless music from Tidal, Qobuz, Deezer, YouTube, Telegram and more — one fast, beautiful app on your phone, tablet and desktop that puts sound quality first.</p>
-        <div class="hero__actions">
+  <section class="h-hero" aria-labelledby="hero-title">
+    <div class="h-hero__inner">
+      <div class="h-hero__copy">
+        <p class="h-kicker">Free, open-source music player · Android · iOS · Windows · macOS · Linux</p>
+        <h1 class="h-hero__title" id="hero-title">Every source.<br><span>One player.</span></h1>
+        <p class="h-hero__sub">Natune picks the best stream for each song from the services you use, then plays it the way you set up: lossless where available, gapless between tracks, with lyrics that follow every word.</p>
+        <div class="hero__actions h-actions">
           <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
-          <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
+          <a class="btn btn-outline" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>Source code</a>
         </div>
-        <div class="hero__meta">
-          <span><b id="hero-version">N20261103</b> latest</span><span class="dot"></span>
-          <span><svg class="icon"><use href="#i-star"/></svg> <b id="hero-stars">—</b> on GitHub</span><span class="dot"></span>
-          <span>License <b>GPL-3.0</b></span>
-        </div>
+        <dl class="h-facts">
+          <div><dt>Latest build</dt><dd id="hero-version">—</dd></div>
+          <div><dt>GitHub stars</dt><dd id="hero-stars">—</dd></div>
+          <div><dt>License</dt><dd>GPL-3.0</dd></div>
+        </dl>
       </div>
-      <div class="hero__device">
-        <div class="phone">
-          <div class="phone__screen">
-            <div class="phone__notch"></div>
-            <img src="/assets/screenshots/01-home.png" alt="Natune home screen" loading="eager">
-            <div class="phone__badge"><svg class="icon"><use href="#i-eq"/></svg>FLAC · up to 24-bit/192&nbsp;kHz</div>
+
+      <!-- A drawn console, not a screenshot: it shows how Natune resolves one song. -->
+      <div class="h-console" aria-hidden="true">
+        <div class="h-console__now">
+          <div class="h-art"><span></span></div>
+          <div class="h-now__text">
+            <b>Now playing</b>
+            <span>Track 04 · 3:52</span>
           </div>
+          <span class="h-badge">FLAC 24/96</span>
+        </div>
+        <div class="h-progress"><i></i></div>
+        <p class="h-lyric"><span class="sung">every word</span> <span class="current">lights</span> <span>up on time</span></p>
+        <ol class="h-chain">
+          <li class="is-active"><span class="h-dot"></span>Tidal<em>playing · lossless</em></li>
+          <li><span class="h-dot"></span>Qobuz<em>standby</em></li>
+          <li><span class="h-dot"></span>Deezer<em>standby</em></li>
+          <li class="is-skip"><span class="h-dot"></span>YouTube<em>fallback</em></li>
+        </ol>
+        <div class="h-console__out">
+          <span><svg class="icon"><use href="#i-eq"/></svg>EBU R128 · −14 LUFS</span>
+          <span><svg class="icon"><use href="#i-swap"/></svg>Automix on</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== SHOWCASE ===================== -->
-  <section id="showcase" class="section section-band" aria-labelledby="showcase-title">
+  <!-- ===================== LIVE STRIP ===================== -->
+  <section class="h-live" aria-label="Natune right now">
+    <div class="wrap h-live__inner">
+      <a class="h-live__item" id="live-listeners" href="https://listeners.natune.app/" rel="noopener">
+        <span class="h-pulse" aria-hidden="true"></span>
+        <span><b id="live-count">—</b> <span id="live-label">people listening now</span></span>
+        <small id="live-where">Opt-in listener map</small>
+      </a>
+      <a class="h-live__item" id="live-news" href="/news/">
+        <svg class="icon"><use href="#i-news"/></svg>
+        <span><b>Latest news</b> <span id="live-news-title">Release notes and known issues</span></span>
+        <small>Read</small>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT PLAYS ===================== -->
+  <section id="how" class="section" aria-labelledby="how-title">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-phone"/></svg>Showcase</span>
-        <h2 id="showcase-title">Take a look around</h2>
-        <p>A clean, fast interface in two flavors: a Material 3 Expressive look or an Apple Music–style player. Real screenshots land here soon.</p>
+        <h2 id="how-title">How a song gets to your ears</h2>
+        <p>Natune is a player, not a music service. It looks for the song in the sources you turned on, in the order you set, and plays the best copy it finds.</p>
       </div>
-      <div class="shots" role="list">
-        <figure role="listitem"><img src="/assets/screenshots/01-home.png" alt="Natune home" loading="lazy"><figcaption><svg class="icon"><use href="#i-note"/></svg>Home</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/02-library.png" alt="Natune library" loading="lazy"><figcaption><svg class="icon"><use href="#i-note"/></svg>Library</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/03-player.png" alt="Natune player" loading="lazy"><figcaption><svg class="icon"><use href="#i-play"/></svg>Player</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/04-lyrics.png" alt="Synced lyrics" loading="lazy"><figcaption><svg class="icon"><use href="#i-lyrics"/></svg>Lyrics</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/05-queue.png" alt="Play queue" loading="lazy"><figcaption><svg class="icon"><use href="#i-play"/></svg>Queue</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/06-downloads.png" alt="Downloads" loading="lazy"><figcaption><svg class="icon"><use href="#i-offline"/></svg>Downloads</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/07-settings.png" alt="Settings" loading="lazy"><figcaption><svg class="icon"><use href="#i-tune"/></svg>Settings</figcaption></figure>
-        <figure role="listitem"><img src="/assets/screenshots/08-pool.png" alt="Playback Pool" loading="lazy"><figcaption><svg class="icon"><use href="#i-hub"/></svg>Pool</figcaption></figure>
-      </div>
+      <ol class="h-steps">
+        <li class="reveal">
+          <span class="h-steps__n">1</span>
+          <h3>You choose the sources</h3>
+          <p>Tidal, Qobuz, Deezer, YouTube, Telegram and local files. Put them in your order. A source you turn off is skipped everywhere: playback, prefetch, crossfade and downloads.</p>
+        </li>
+        <li class="reveal">
+          <span class="h-steps__n">2</span>
+          <h3>Natune finds the best stream</h3>
+          <p>Each track is matched across your sources and the highest quality you can play wins, up to 24-bit/192&nbsp;kHz FLAC. If one source fails, the next one takes over without stopping the music.</p>
+        </li>
+        <li class="reveal">
+          <span class="h-steps__n">3</span>
+          <h3>Sound is shaped your way</h3>
+          <p>Equalizer, loudness normalization, tempo and pitch, crossfade and beat-matched automix. With a USB DAC, bit-perfect output leaves the stream untouched.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
   <!-- ===================== FEATURES ===================== -->
-  <section id="features" class="section" aria-labelledby="features-title">
+  <section id="features" class="section section-band" aria-labelledby="features-title">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-tune"/></svg>Features</span>
-        <h2 id="features-title">Built for people who listen closely</h2>
-        <p>Serious audio plumbing under a friendly surface. Pick your sources once — Natune handles the rest.</p>
+        <h2 id="features-title">What you get</h2>
+        <p>The parts people mention first.</p>
       </div>
-      <div class="features__grid">
-        <article class="feature feature--wide reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-eq"/></svg></div>
-          <h3>Multi-source lossless playback</h3>
-          <p>Stream FLAC and hi-res audio from Tidal, Qobuz and Deezer, with YouTube and Telegram as fallbacks. Sources play in the priority order you choose — disabled sources are skipped everywhere: playback, prefetch, crossfade and downloads.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Tidal · FLAC</span>
-            <span class="chip is-on">Qobuz · 24-bit</span>
-            <span class="chip is-on">Deezer · FLAC</span>
-            <span class="chip">Telegram</span>
-            <span class="chip">YouTube · fallback</span>
-          </div></div>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-tune"/></svg></div>
-          <h3>Audiophile-grade DSP</h3>
-          <p>System equalizer and spatial audio, EBU R128 loudness normalization, tempo and pitch controls — plus bit-perfect output over USB DACs when you want the stream untouched.</p>
-          <div class="feature__demo"><div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-swap"/></svg></div>
-          <h3>Smart transitions &amp; automix</h3>
-          <p>Crossfade and automix between tracks with bounded hand-off and recovery policies — gapless listening that survives bad networks.</p>
-          <div class="feature__demo">
-            <div class="demo-row"><span>Crossfade</span><b>6 s</b></div>
-            <div class="demo-row"><span>Automix</span><b>On</b></div>
+      <div class="h-rows">
+        <article class="h-row reveal">
+          <div class="h-row__text">
+            <h3><svg class="icon"><use href="#i-lyrics"/></svg>Lyrics that keep time</h3>
+            <p>Word-by-word and line-synced lyrics from several providers, with background vocals, translation and romanization where they exist.</p>
+          </div>
+          <div class="h-row__demo h-lyrics">
+            <p class="is-past">I hear the city hum</p>
+            <p class="is-now"><span class="sung">every</span> <span class="sung">source,</span> <span class="current">one</span> <span>player</span></p>
+            <p>turn it up and let it run</p>
           </div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-lyrics"/></svg></div>
-          <h3>Word-by-word lyrics</h3>
-          <p>Synced, TTML and karaoke lyrics powered by Lyprio, with translation and romanization where available.</p>
-          <div class="feature__demo">
-            <div class="lyrics-line"><span class="sung">Every source,</span> <span class="current">one</span> player</div>
+        <article class="h-row reveal">
+          <div class="h-row__text">
+            <h3><svg class="icon"><use href="#i-swap"/></svg>Transitions that don't stop</h3>
+            <p>Gapless playback, crossfade, and an automix that reads tempo, beats and vocals to choose where one song hands over to the next.</p>
+          </div>
+          <div class="h-row__demo h-mix" aria-hidden="true">
+            <div class="h-wave h-wave--out"></div>
+            <div class="h-wave h-wave--in"></div>
+            <span class="h-mix__label">8 s blend on the beat</span>
           </div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-groups"/></svg></div>
-          <h3>Listen Together</h3>
-          <p>Open a room, invite friends, suggest songs and keep playback synchronized for everyone.</p>
-          <div class="feature__demo"><div class="demo-room"><span class="demo-avatars"><i></i><i></i><i></i><i></i></span><span>4 listening now</span></div></div>
+        <article class="h-row reveal">
+          <div class="h-row__text">
+            <h3><svg class="icon"><use href="#i-groups"/></svg>Listen Together</h3>
+            <p>Open a room, share the link and play in sync with friends. Everyone can suggest songs; the host keeps control.</p>
+          </div>
+          <div class="h-row__demo" aria-hidden="true">
+            <div class="demo-room"><span class="demo-avatars"><i></i><i></i><i></i><i></i></span><span>4 in the room · in sync</span></div>
+          </div>
         </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-note"/></svg></div>
-          <h3>Your kind of beautiful</h3>
-          <p>17 player styles — including an Apple Music–inspired look — Material 3 Expressive, liquid-glass surfaces, and dynamic colors pulled from your album art.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Material 3 Expressive</span>
-            <span class="chip is-on">Apple Music style</span>
-            <span class="chip">16 more styles</span>
-          </div></div>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon"><svg class="icon icon-lg"><use href="#i-laptop"/></svg></div>
-          <h3>Every platform</h3>
-          <p>One shared Kotlin Multiplatform codebase runs Natune on Android, iOS, Windows, macOS and Linux — with native adapters where desktop and iOS need them.</p>
-          <div class="feature__demo"><div class="demo-sources">
-            <span class="chip is-on">Android</span>
-            <span class="chip is-on">iOS</span>
-            <span class="chip is-on">Windows</span>
-            <span class="chip is-on">macOS</span>
-            <span class="chip is-on">Linux</span>
-          </div></div>
+        <article class="h-row reveal">
+          <div class="h-row__text">
+            <h3><svg class="icon"><use href="#i-tune"/></svg>Make it look like yours</h3>
+            <p>Material 3 Expressive throughout, colors taken from the album art, and a choice of player styles from minimal to full-screen canvas video.</p>
+          </div>
+          <div class="h-row__demo h-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         </article>
       </div>
-      <ul class="feature-list reveal">
-        <li><svg class="icon"><use href="#i-offline"/></svg>Downloads &amp; offline</li>
-        <li><svg class="icon"><use href="#i-backup"/></svg>Backup &amp; restore</li>
-        <li><svg class="icon"><use href="#i-discord"/></svg>Discord rich presence</li>
+      <ul class="feature-list h-extras reveal">
+        <li><svg class="icon"><use href="#i-offline"/></svg>Downloads and offline</li>
+        <li><svg class="icon"><use href="#i-backup"/></svg>Backup and restore</li>
+        <li><svg class="icon"><use href="#i-discord"/></svg>Discord status</li>
         <li><svg class="icon"><use href="#i-tv"/></svg>Android TV</li>
-        <li><svg class="icon"><use href="#i-hub"/></svg>Playback Pool</li>
-        <li><svg class="icon"><use href="#i-cast"/></svg>Cast to devices</li>
-        <li><svg class="icon"><use href="#i-star"/></svg>Last.fm &amp; ListenBrainz</li>
-        <li><svg class="icon"><use href="#i-check"/></svg>Listening stats</li>
+        <li><svg class="icon"><use href="#i-cast"/></svg>Cast</li>
+        <li><svg class="icon"><use href="#i-star"/></svg>Last.fm and ListenBrainz</li>
       </ul>
     </div>
   </section>
 
   <!-- ===================== PLATFORMS ===================== -->
-  <section id="platforms" class="section section-band" aria-labelledby="platforms-title">
-    <div class="wrap">
+  <section id="platforms" class="section" aria-labelledby="platforms-title">
+    <div class="wrap h-platforms">
       <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-laptop"/></svg>Platforms</span>
-        <h2 id="platforms-title">Every platform. One codebase.</h2>
-        <p>Natune is a single Kotlin Multiplatform app — the same code and the same features on Android, iOS, Windows, macOS and Linux. Nightly builds for all five ship from GitHub releases.</p>
+        <h2 id="platforms-title">One app on every screen</h2>
+        <p>Natune is built with Kotlin Multiplatform: one shared codebase, with native audio on each system. Android is the most complete; desktop and iOS are newer and improving with every build.</p>
       </div>
-      <div class="platforms__grid">
-        <article class="platform-card reveal">
-          <div class="platform-card__head"><svg class="icon"><use href="#i-phone"/></svg><div><h3>Android</h3><span class="tag">Available now</span></div></div>
-          <p>The native Android app, built from the same shared codebase — daily Nightly builds bring the newest features to Android 7 and newer, on phones and TV.</p>
-          <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Android 7 and newer</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Android TV supported</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Universal APK via GitHub releases</li>
-          </ul>
-          <div class="platform-card__actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-            <a class="btn btn-outline btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All builds</a>
-          </div>
-        </article>
-        <article class="platform-card reveal">
-          <div class="platform-card__head"><svg class="icon"><use href="#i-laptop"/></svg><div><h3>Desktop &amp; iOS</h3><span class="tag">Nightly builds</span></div></div>
-          <p>The Kotlin Multiplatform port brings Natune to Windows, macOS, Linux and iOS — one shared codebase with native adapters, so the app feels at home on every screen. iOS installs as an unsigned IPA via AltStore or SideStore.</p>
-          <div class="kmp-pills">
-            <span class="kmp-pill"><svg class="icon"><use href="#i-windows"/></svg>Windows</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>macOS</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-terminal"/></svg>Linux</span>
-            <span class="kmp-pill"><svg class="icon"><use href="#i-apple"/></svg>iOS</span>
-          </div>
-          <div class="platform-card__actions">
-            <a class="btn btn-primary btn-sm" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download</a>
-            <a class="btn btn-tonal btn-sm" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>Source</a>
-          </div>
-        </article>
+      <ul class="h-os reveal">
+        <li><svg class="icon"><use href="#i-phone"/></svg><b>Android</b><span>7.0 and newer, phones and TV</span></li>
+        <li><svg class="icon"><use href="#i-windows"/></svg><b>Windows</b><span>Installer or portable zip</span></li>
+        <li><svg class="icon"><use href="#i-laptop"/></svg><b>macOS</b><span>DMG</span></li>
+        <li><svg class="icon"><use href="#i-terminal"/></svg><b>Linux</b><span>.deb or AppImage</span></li>
+        <li><svg class="icon"><use href="#i-apple"/></svg><b>iOS</b><span>Unsigned IPA for AltStore or SideStore</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== NEWS ===================== -->
+  <section id="news" class="section section-band" aria-labelledby="news-title">
+    <div class="wrap">
+      <div class="section-head h-head-row reveal">
+        <h2 id="news-title">News</h2>
+        <a class="btn btn-outline btn-sm" href="/news/">All posts</a>
       </div>
+      <ul class="h-news" id="home-news">
+        <li class="h-news__empty">Posts appear here as soon as they are published. <a href="/news/">Open the news page</a>.</li>
+      </ul>
     </div>
   </section>
 
@@ -273,22 +274,17 @@
   <section id="faq" class="section" aria-labelledby="faq-title">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow"><svg class="icon"><use href="#i-help"/></svg>FAQ</span>
-        <h2 id="faq-title">Common questions</h2>
+        <h2 id="faq-title">Questions</h2>
       </div>
       <div class="faq__list faq">
-        <details class="reveal"><summary>Is Natune free?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — completely free and open source under GPL-3.0. No ads, no paywalled features, no tracking. Some streaming sources (like Tidal or Qobuz) require your own paid subscription with that provider.</div></details>
-        <details class="reveal"><summary>Is Natune legal? What sources does it use?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Natune is a media player, not a music service — it does not host, upload, or distribute any content. It plays from sources you configure and authenticate with: Tidal, Qobuz, Deezer, YouTube, Telegram and others, using your own accounts and subscriptions where required. How you use it is your responsibility; check the terms of each provider.</div></details>
-        <details class="reveal"><summary>Does it really play lossless audio?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — where the source and your subscription provide it, Natune streams FLAC up to hi-res (24-bit/192&nbsp;kHz on supported services like Tidal and Qobuz). With a USB DAC you can enable bit-perfect output so the stream reaches the DAC unaltered.</div></details>
-        <details class="reveal"><summary>Do I need accounts for Tidal, Qobuz or Deezer?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">For full-quality streams, yes — each provider requires its own account and, for lossless tiers, a paid subscription. YouTube works without a sign-in for basic playback, and Telegram uses your own Telegram account. You choose which sources are enabled and in which order they are tried.</div></details>
-        <details class="reveal"><summary>What is the Playback Pool?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">ArchivePool is a self-hostable community pool: contributors anonymously share Tidal/Qobuz instances and accounts, the pool health-checks them on a schedule and drops dead ones, and Natune auto-discovers the surviving sources at runtime. It is optional — the app works fine with only your own accounts.</div></details>
-        <details class="reveal"><summary>Is there an iOS or desktop version?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune is now one Kotlin Multiplatform app: nightly builds for Windows, macOS, Linux and iOS ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> alongside Android. Pick your platform in the download dialog — desktop builds install natively, iOS sideloads an unsigned IPA via AltStore or SideStore. The port is young, so expect rough edges and report what you find.</div></details>
-        <details class="reveal"><summary>Stable or Nightly — which should I install?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Right now every public build is a Nightly: builds tagged <code>N…</code> ship from <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a> for all five platforms at once — newest features, occasional bugs. A Stable channel returns once the multi-platform port settles; watch <a href="/news/">the news feed</a>. Keep a backup before switching channels.</div></details>
-        <details class="reveal"><summary>What data does Natune send?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Very little by default. The news feed is fetched from this site with a plain anonymous GET — no identifiers, no telemetry. The optional “listener presence” feature is strictly opt-in: while enabled and playing, the app sends a random rotating ID, platform and app version about every 15 minutes; country/city are derived server-side from IP and rounded to ~1&nbsp;km. It never sends what you play, your accounts, or your device ID — and opting out deletes the local ID. See <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" rel="noopener">PRIVACY.md</a> for details.</div></details>
-        <details class="reveal"><summary>How do I report a bug or request a feature?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Open an issue on <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">GitHub</a> — include your app version, platform and steps to reproduce. For chat support, join the <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram group</a> or <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord server</a>.</div></details>
-        <details class="reveal"><summary>Can I donate or support the project?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">The most valuable contribution is a good bug report, a translation, or a pull request. If you want to support development financially, the maintainer accepts donations via <a href="https://github.com/sponsors/rukamori" rel="noopener">GitHub Sponsors</a> and <a href="https://ko-fi.com/rukamori" rel="noopener">Ko-fi</a>.</div></details>
-        <details class="reveal"><summary>Does Natune work on Android TV?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes — the same APK supports Android TV with a leanback-friendly interface, so you can browse and play from the couch.</div></details>
-        <details class="reveal"><summary>Can I back up or move my library to a new phone?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Natune can export a backup of your settings, library and playlists from Settings → Backup, and restore it on another device or after a reinstall.</div></details>
+        <details class="reveal"><summary>Is Natune free?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. It is free and open source under GPL-3.0, with no ads and no paid features. Some sources, like Tidal or Qobuz, need your own subscription with that service.</div></details>
+        <details class="reveal"><summary>Where does the music come from?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">From the sources you set up: Tidal, Qobuz, Deezer, YouTube, Telegram, local files and others, using your own accounts where a service requires one. Natune does not host, upload or distribute any media. Check each service's terms for how you may use it.</div></details>
+        <details class="reveal"><summary>Does it really play lossless?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes, when the source and your subscription provide it: FLAC up to 24-bit/192&nbsp;kHz. With a USB DAC you can turn on bit-perfect output so the stream reaches the DAC unchanged.</div></details>
+        <details class="reveal"><summary>What is the Playback Pool?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">An optional, self-hostable community pool of Tidal and Qobuz instances. The pool checks them on a schedule and Natune discovers the working ones at runtime. Natune works fine without it.</div></details>
+        <details class="reveal"><summary>Stable or Nightly?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Stable releases are tested builds and the right choice for most people. Nightlies are built from the development branch every day: newest features, occasional bugs. Both are on <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a>. Make a backup before switching.</div></details>
+        <details class="reveal"><summary>What data does Natune send?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Very little. The news feed is a plain anonymous request to this site. The listener map is off until you turn it on; then, only while music plays, the app sends a random ID, the platform and the app version about every 15 minutes, and the server derives a rough location from the IP without storing it. It never sends what you play or your accounts. See <a href="https://github.com/NatuneGroup/Natune/blob/dev/PRIVACY.md" rel="noopener">PRIVACY.md</a>.</div></details>
+        <details class="reveal"><summary>Can I move my library to a new phone?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Yes. Settings → Backup exports your settings, library and playlists, and you can restore the file on another device.</div></details>
+        <details class="reveal"><summary>How do I report a bug?<svg class="icon"><use href="#i-add"/></svg></summary><div class="faq__a">Open an issue on <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">GitHub</a> with your app version, platform and the steps that cause it. For chat, join <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram</a> or <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord</a>.</div></details>
       </div>
     </div>
   </section>
@@ -296,16 +292,14 @@
   <!-- ===================== DOWNLOAD ===================== -->
   <section id="download" class="section section-band download" aria-labelledby="download-title">
     <div class="wrap">
-      <span class="eyebrow eyebrow--center"><svg class="icon"><use href="#i-download"/></svg>Install</span>
       <h2 id="download-title" class="reveal">Get Natune</h2>
-      <p class="reveal">One app for Android, iOS, Windows, macOS and Linux. Pick your platform — the dialog matches the newest build on GitHub.</p>
+      <p class="reveal">Choose your platform and the dialog picks the right file from the newest release.</p>
       <div class="download__actions reveal">
         <a class="btn btn-primary" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener" data-dl-open><svg class="icon"><use href="#i-download"/></svg>Download Natune</a>
-        <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>View source</a>
+        <a class="btn btn-tonal" href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All releases</a>
       </div>
-      <noscript><p class="download__note">JavaScript is off — download Natune straight from the <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases page</a>.</p></noscript>
-      <p class="reveal download__meta">Newest build <b id="dl-latest">N20261103</b> · nightly channel</p>
-      <p class="download__note reveal">Natune does not host, upload, or distribute any music, videos or other media. It is a player that streams from sources you configure — Tidal, Qobuz, Deezer, YouTube, Telegram and others — using your own accounts and subscriptions where required. Natune is free software under GPL-3.0 and is not affiliated with Tidal, Qobuz, Deezer, YouTube, Telegram or Google.</p>
+      <noscript><p class="download__note">JavaScript is off. Download Natune from the <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases page</a>.</p></noscript>
+      <p class="reveal download__meta">Newest build <b id="dl-latest">—</b></p>
     </div>
   </section>
 </main>
@@ -330,6 +324,7 @@
         <div class="footer__col">
           <h4>Community</h4>
           <a href="/news/">News</a>
+          <a href="https://listeners.natune.app/" rel="noopener">Listener map <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://t.me/ArchiveTuneGC" rel="noopener">Telegram <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://discord.gg/XF2fpb9rTq" rel="noopener">Discord <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://github.com/NatuneGroup/ArchiveTune" rel="noopener">ArchiveTune <svg class="icon"><use href="#i-outward"/></svg></a>
@@ -337,7 +332,7 @@
         <div class="footer__col">
           <h4>Get the app</h4>
           <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">All platforms <svg class="icon"><use href="#i-outward"/></svg></a>
-          <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">Nightly builds <svg class="icon"><use href="#i-outward"/></svg></a>
+          <a href="https://github.com/NatuneGroup/Natune/releases?q=prerelease%3Atrue" rel="noopener">Nightly builds <svg class="icon"><use href="#i-outward"/></svg></a>
           <a href="https://github.com/NatuneGroup/Natune/issues" rel="noopener">Report an issue <svg class="icon"><use href="#i-outward"/></svg></a>
         </div>
       </div>
@@ -384,10 +379,11 @@
     <h3 class="dlmodal__h">Download</h3>
     <div class="dlmodal__links" id="dl-links"><p class="dlmodal__hint">Loading the newest build…</p></div>
     <p class="dlmodal__hint" id="dl-hint"></p>
-    <p class="dlmodal__foot">Every build is published on <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a>. All current builds are rolling nightlies — a stable channel returns when the multi-platform port settles.</p>
+    <p class="dlmodal__foot">Every build is published on <a href="https://github.com/NatuneGroup/Natune/releases" rel="noopener">GitHub releases</a>. Stable releases are the tested builds; Nightlies follow the development branch.</p>
   </div>
 </div>
 
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/home.js" defer></script>
 </body>
 </html>

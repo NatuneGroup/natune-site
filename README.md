@@ -1,6 +1,8 @@
 # natune-site
 
-Public website for **Natune** — <https://natune.pages.dev> — hosted on Cloudflare Pages.
+Public website for **Natune** — <https://natune.app> (also <https://natune.pages.dev>) — hosted on Cloudflare Pages.
+
+The listener map is at <https://listeners.natune.app> (GitHub Pages, `NatuneGroup/natune-status`) and its API at <https://status.natune.app>.
 
 ## What's here
 
